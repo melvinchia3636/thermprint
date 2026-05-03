@@ -1,0 +1,7 @@
+bleak==3.0.1
+pillow==12.2.0
+pyobjc-core==12.1
+pyobjc-framework-cocoa==12.1
+pyobjc-framework-corebluetooth==12.1
+pyobjc-framework-libdispatch==12.1
+python-lzo==1.15

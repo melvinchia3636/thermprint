@@ -1,0 +1,13 @@
+{
+  "ble_device_name": "X5h-10B5",
+  "width": 384,
+  "quality": 52,
+  "speed": 92,
+  "energy": 0,
+  "contrast": 1.0,
+  "gamma": 2.0,
+  "rotate": 0,
+  "chunk_rows": 10,
+  "chunk_delay": 0.4,
+  "feed": 106
+}
