@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useDeviceContext } from "../context/DeviceContext";
-import { useJobContext } from "../context/JobContext";
 import { useQueueDrawer } from "../context/QueueDrawerContext";
 import DeviceSelector from "./DeviceSelector";
+import ProjectDescModal from "./ProjectDescModal";
 
 const STATUS_CONFIG: Record<
   string,
@@ -28,6 +28,7 @@ const STATUS_CONFIG: Record<
 
 export default function Header() {
   const [showDialog, setShowDialog] = useState(false);
+  const [showProjectDesc, setShowProjectDesc] = useState(false);
   const { connection, deviceName } = useDeviceContext();
   const { queueOpen, setQueueOpen } = useQueueDrawer();
   const cfg = STATUS_CONFIG[connection] || STATUS_CONFIG.offline;
@@ -70,9 +71,20 @@ export default function Header() {
                 {deviceName}
               </span>
             </button>
-            <button className="btn btn-ghost btn-square">
-              <Icon icon="tabler:info-circle" />
+            <button
+              onClick={() => setShowProjectDesc(true)}
+              className="btn btn-ghost btn-square text-base-content/50 hover:text-base-content"
+            >
+              <Icon icon="tabler:info-circle" className="size-5" />
             </button>
+            <a
+              href="https://github.com/melvinchia3636/thermprint"
+              className="btn btn-ghost btn-square text-base-content/50 hover:text-base-content"
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              <Icon icon="mdi:github" className="size-5" />
+            </a>
           </div>
         </div>
       </header>
@@ -82,8 +94,11 @@ export default function Header() {
       >
         <Icon icon="tabler:list" className="size-6" />
       </button>
-
       <DeviceSelector open={showDialog} onClose={() => setShowDialog(false)} />
+      <ProjectDescModal
+        open={showProjectDesc}
+        onClose={() => setShowProjectDesc(false)}
+      />
     </>
   );
 }
