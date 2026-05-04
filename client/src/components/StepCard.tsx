@@ -29,7 +29,9 @@ export default function StepCard({
           </h2>
           {actionButton}
         </header>
-        <div className="flex-1 min-h-0 flex flex-col">{children}</div>
+        <div className="flex-1 min-h-0 flex flex-col overflow-y-auto">
+          {children}
+        </div>
         <footer className="flex justify-between mt-3">
           {onPrevious && (
             <button onClick={onPrevious} className="btn btn-outline">

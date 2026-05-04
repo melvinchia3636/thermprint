@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
-import { useApp } from "../context/AppContext";
+import { useDeviceContext } from "../context/DeviceContext";
 
 export default function DeviceSelector({ open, onClose }: {
   open: boolean;
   onClose: () => void;
 }) {
-  const { devices, refreshDevices, localSettings, setLocalSettings, defaults } =
-    useApp();
+  const { devices, refreshDevices, deviceName, setDeviceName } = useDeviceContext();
   const [scanning, setScanning] = useState(false);
   const ref = useRef<HTMLDialogElement>(null);
 
@@ -17,8 +16,7 @@ export default function DeviceSelector({ open, onClose }: {
     else ref.current.close();
   }, [open]);
 
-  const effective = localSettings ?? defaults;
-  const selectedName = effective?.ble_device_name;
+  const selectedName = deviceName;
 
   const handleScan = async () => {
     setScanning(true);
@@ -27,7 +25,7 @@ export default function DeviceSelector({ open, onClose }: {
   };
 
   const handleSelect = (name: string) => {
-    if (effective) setLocalSettings({ ...effective, ble_device_name: name });
+    if (name) setDeviceName(name);
     onClose();
   };
 

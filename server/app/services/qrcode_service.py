@@ -1,12 +1,25 @@
 import json
 import logging
+from io import BytesIO
 from pathlib import Path
 
 import qrcode
 from PIL import Image
+from qrcode.constants import ERROR_CORRECT_H
+from qrcode.image.styledpil import StyledPilImage
+from qrcode.image.styles.moduledrawers.pil import (
+    CircleModuleDrawer,
+    GappedSquareModuleDrawer,
+    HorizontalBarsDrawer,
+    RoundedModuleDrawer,
+    SquareModuleDrawer,
+    VerticalBarsDrawer,
+)
+from qrcode.image.styles.colormasks import SolidFillColorMask
 
 from thermal_printer.image_processor import gray_to_nibbles
 from server.app.schemas.print_settings import PrintSettings
+from server.app.schemas.preview import PreviewResponse
 from server.app.services.job_manager import JobManager, JobType
 
 logger = logging.getLogger(__name__)
@@ -23,12 +36,24 @@ def _auto_box_size(modules_count: int, target: int) -> int:
     return max(1, target // (modules_count + 4))
 
 
-def print_qr_code(url: str, size: int, job_manager: JobManager):
-    settings = _load_qr_settings()
-    printer_width = settings.width
-    size = max(50, min(printer_width, size))
+_DRAWERS = {
+    "square": SquareModuleDrawer,
+    "gapped": GappedSquareModuleDrawer,
+    "circle": CircleModuleDrawer,
+    "rounded": RoundedModuleDrawer,
+    "vertical-bars": VerticalBarsDrawer,
+    "horizontal-bars": HorizontalBarsDrawer,
+}
 
-    qr = qrcode.QRCode(border=2)
+
+def _get_drawer(style: str):
+    cls = _DRAWERS.get(style, SquareModuleDrawer)
+    return cls()
+
+
+def _generate_qr_image(url: str, size: int, style: str = "square", embed_image: bytes | None = None) -> tuple[Image.Image, int]:
+    error_correction = qrcode.constants.ERROR_CORRECT_H if embed_image else qrcode.constants.ERROR_CORRECT_M
+    qr = qrcode.QRCode(border=2, error_correction=error_correction)
     qr.add_data(url)
     qr.make(fit=True)
 
@@ -37,8 +62,39 @@ def print_qr_code(url: str, size: int, job_manager: JobManager):
     qr.box_size = box_size
     qr.make(fit=True)
 
-    img = qr.make_image(fill_color="black", back_color="white").convert("L")
+    drawer = _get_drawer(style)
+    kw = dict(image_factory=StyledPilImage, module_drawer=drawer, color_mask=SolidFillColorMask())
+
+    if embed_image:
+        logo = Image.open(BytesIO(embed_image)).convert("RGBA")
+        logo_size = min(logo.size)
+        left = (logo.width - logo_size) // 2
+        top = (logo.height - logo_size) // 2
+        logo = logo.crop((left, top, left + logo_size, top + logo_size))
+        buf = BytesIO()
+        logo.save(buf, format="PNG")
+        buf.seek(0)
+        kw["embeded_image_path"] = buf
+
+    img = qr.make_image(**kw).convert("L")
     img = img.resize((size, size), Image.LANCZOS)
+
+    return img, size
+
+
+def preview_qr_code(url: str, size: int, style: str = "square", embed_image: bytes | None = None) -> PreviewResponse:
+    img, size = _generate_qr_image(url, size, style, embed_image)
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    return PreviewResponse.from_preview_image(buf, size, size)
+
+
+def print_qr_code(url: str, size: int, job_manager: JobManager, ble_device_name: str = "X5h-10B5", style: str = "square", embed_image: bytes | None = None):
+    settings = _load_qr_settings()
+    printer_width = settings.width
+    size = max(50, min(printer_width, size))
+
+    img, size = _generate_qr_image(url, size, style, embed_image)
 
     canvas = Image.new("L", (printer_width, size), 255)
     offset = (printer_width - size) // 2
@@ -52,7 +108,7 @@ def print_qr_code(url: str, size: int, job_manager: JobManager):
         nibble_data=nibble_data,
         width=printer_width,
         settings={
-            "ble_device_name": settings.ble_device_name,
+            "ble_device_name": ble_device_name,
             "quality": settings.quality,
             "speed": settings.speed,
             "energy": settings.energy,

@@ -1,11 +1,12 @@
-import { useUpdateSettings } from "../../../../api/settings";
-import { useApp } from "../../../../context/AppContext";
-import StepCard from "../../components/StepCard";
+import { useImagePrinting } from "../../contexts/ImagePrintingContext";
+import StepCard from "../../../../components/StepCard";
 import FieldGroup from "./components/FieldGroup";
 import { IMAGE_FIELDS, PRINTER_FIELDS } from "./constants/fields";
+import { useUpdateSettings } from "../../../../api/settings";
 
 export default function SettingsStep() {
-  const { setStep, localSettings, setLocalSettings, defaults } = useApp();
+  const { setStep, localSettings, setLocalSettings, defaults } =
+    useImagePrinting();
   const updateSettings = useUpdateSettings();
   const effective = localSettings ?? defaults;
 

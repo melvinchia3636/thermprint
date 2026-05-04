@@ -39,3 +39,4 @@ class JobListResponse(BaseModel):
 class QRCodeRequest(BaseModel):
     url: HttpUrl = Field(description="URL to encode as QR code")
     size: int = Field(default=384, ge=50, le=384, description="QR code size in pixels")
+    style: str = Field(default="square", description="QR code module style")

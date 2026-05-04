@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import { Icon } from "@iconify/react";
-import { useApp } from "../../../context/AppContext";
-import StepCard from "../components/StepCard";
+import { useImagePrinting } from "../contexts/ImagePrintingContext";
+import StepCard from "../../../components/StepCard";
 
 export default function SelectImageStep() {
-  const { image, setImage, setStep } = useApp();
+  const { image, setImage, setStep } = useImagePrinting();
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
 

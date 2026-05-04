@@ -2,7 +2,6 @@ from pydantic import BaseModel, Field
 
 
 class PrintSettings(BaseModel):
-    ble_device_name: str = Field(default="X5h-10B5", description="BLE device name filter")
     width: int = Field(default=384, ge=64, le=1000, description="Printer width in pixels")
     quality: int = Field(default=0x32, ge=0x31, le=0x35, description="Print quality")
     speed: int = Field(default=0x10, ge=0x01, le=0xFF, description="Feed speed, smaller=faster")

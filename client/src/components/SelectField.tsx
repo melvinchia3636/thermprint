@@ -14,24 +14,24 @@ export default function SelectField({
   onChange: (v: number) => void;
 }) {
   return (
-    <fieldset className="flex flex-col gap-1.5 p-3 rounded-box bg-base-300/50">
-      <legend className="flex items-center gap-1.5 min-w-0 px-0">
+    <label className="flex flex-col gap-1.5 p-3 rounded-box bg-base-300/50">
+      <span className="flex items-center gap-1.5 min-w-0">
         <span className="text-sm font-medium text-base-content truncate">
           {label}
         </span>
         {description && <InfoPopover description={description} id={label} />}
-      </legend>
-      <div className="flex gap-2">
+      </span>
+      <select
+        className="select select-bordered w-full"
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+      >
         {options.map((opt) => (
-          <button
-            key={opt.value}
-            onClick={() => onChange(opt.value)}
-            className={`btn btn-sm flex-1 ${value === opt.value ? "btn-primary" : "btn-ghost border border-base-content/10"}`}
-          >
+          <option key={opt.value} value={opt.value}>
             {opt.label}
-          </button>
+          </option>
         ))}
-      </div>
-    </fieldset>
+      </select>
+    </label>
   );
 }

@@ -1,19 +1,16 @@
-import { AppProvider, useApp } from "./context/AppContext";
+import { DeviceProvider } from "./context/DeviceContext";
+import { JobProvider } from "./context/JobContext";
 import { QueueDrawerProvider } from "./context/QueueDrawerContext";
 import {
   PrintQueueDesktopView,
   QueueDrawerWrapper,
 } from "./components/PrintQueue";
 import Header from "./components/Header";
-import LoadingScreen from "./components/LoadingScreen";
 import TabbedContent from "./tabs";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function AppContent() {
-  const { defaults } = useApp();
-  if (!defaults) return <LoadingScreen />;
-
   return (
     <QueueDrawerWrapper>
       <Header />
@@ -42,12 +39,14 @@ const qc = new QueryClient();
 export default function App() {
   return (
     <QueryClientProvider client={qc}>
-      <AppProvider>
-        <QueueDrawerProvider>
-          <AppContent />
-        </QueueDrawerProvider>
-        <ToastContainer position="bottom-center" />
-      </AppProvider>
+      <DeviceProvider>
+        <JobProvider>
+          <QueueDrawerProvider>
+            <AppContent />
+          </QueueDrawerProvider>
+        </JobProvider>
+      </DeviceProvider>
+      <ToastContainer position="bottom-center" />
     </QueryClientProvider>
   );
 }

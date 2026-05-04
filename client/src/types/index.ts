@@ -1,5 +1,4 @@
 export interface PrintSettings {
-  ble_device_name: string;
   width: number;
   quality: number;
   speed: number;

@@ -52,18 +52,33 @@ export function usePrint() {
 export function usePrintQRCode() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ url, size }: { url: string; size?: number }) =>
-      request<PrintResponse>("/qrcode", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, size }),
-      }),
+    mutationFn: ({ url, size, style, embedImage }: { url: string; size?: number; style?: string; embedImage?: File | null }) => {
+      const fd = new FormData();
+      fd.append("url", url);
+      if (size) fd.append("size", String(size));
+      if (style) fd.append("style", style);
+      if (embedImage) fd.append("embed_image", embedImage);
+      return request<PrintResponse>("/qrcode", { method: "POST", body: fd });
+    },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["jobs"] });
       toast.success("QR code added to print queue");
     },
     onError: (err) => {
       toast.error(err instanceof Error ? err.message : "Failed to print QR code");
+    },
+  });
+}
+
+export function useQRPreview() {
+  return useMutation({
+    mutationFn: ({ url, size, style, embedImage }: { url: string; size?: number; style?: string; embedImage?: File | null }) => {
+      const fd = new FormData();
+      fd.append("url", url);
+      if (size) fd.append("size", String(size));
+      if (style) fd.append("style", style);
+      if (embedImage) fd.append("embed_image", embedImage);
+      return request<PreviewResponse>("/qrcode/preview", { method: "POST", body: fd });
     },
   });
 }

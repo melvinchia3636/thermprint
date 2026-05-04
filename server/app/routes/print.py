@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, UploadFile, File
+from fastapi import APIRouter, Depends, UploadFile, File, Request
 
 from server.app.dependencies import get_job_manager
 from server.app.schemas.print_settings import PrintSettings
@@ -12,18 +12,19 @@ router = APIRouter(prefix="/api", tags=["Print"])
 
 @router.post("/print", response_model=PrintResponse, status_code=201)
 async def print_image(
+    request: Request,
     image: UploadFile = File(..., description="Image file to print"),
     settings: PrintSettings = Depends(parse_print_settings),
     job_manager: JobManager = Depends(get_job_manager),
 ):
     nibble_data, width, _, _ = _process_image_data(image, settings)
-    print(settings)
+    device_name = request.app.state.device_store.load().get("ble_device_name", "X5h-10B5")
     job = job_manager.create_job(
         JobType.image,
         nibble_data=nibble_data,
         width=width,
         settings={
-            "ble_device_name": settings.ble_device_name,
+            "ble_device_name": device_name,
             "quality": settings.quality,
             "speed": settings.speed,
             "energy": settings.energy,

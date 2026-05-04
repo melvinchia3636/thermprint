@@ -4,7 +4,6 @@ from fastapi.responses import JSONResponse
 
 
 FIELD_LABELS = {
-    "ble_device_name": "BLE device name",
     "width": "Width",
     "quality": "Quality",
     "speed": "Speed",

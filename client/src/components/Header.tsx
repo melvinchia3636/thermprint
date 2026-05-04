@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Icon } from "@iconify/react";
-import { useApp } from "../context/AppContext";
+import { useDeviceContext } from "../context/DeviceContext";
+import { useJobContext } from "../context/JobContext";
 import { useQueueDrawer } from "../context/QueueDrawerContext";
 import DeviceSelector from "./DeviceSelector";
 
@@ -27,9 +28,9 @@ const STATUS_CONFIG: Record<
 
 export default function Header() {
   const [showDialog, setShowDialog] = useState(false);
-  const { localSettings, defaults, jobsData, connection } = useApp();
+  const { connection, deviceName } = useDeviceContext();
+  const { jobsData } = useJobContext();
   const { queueOpen, setQueueOpen } = useQueueDrawer();
-  const deviceName = (localSettings ?? defaults)?.ble_device_name;
   const jobCount = jobsData?.length ?? 0;
   const cfg = STATUS_CONFIG[connection] || STATUS_CONFIG.offline;
 

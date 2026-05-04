@@ -1,9 +1,9 @@
 import { Icon } from "@iconify/react";
-import { useApp } from "../../../context/AppContext";
+import { useJobContext } from "../../../context/JobContext";
 import QueueListItem from "./QueueListItem";
 
 export default function QueueList() {
-  const { jobsData, cancelJob } = useApp();
+  const { jobsData, cancelJob } = useJobContext();
 
   return (
     <>
