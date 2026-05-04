@@ -2,24 +2,26 @@
 
 <p align="center">A lightweight, open-source web app for printing images and QR codes to BLE thermal printers. No ads, no bloat, no nonsense.</p>
 
+> **On Supervised Vibe Coding**  
+> This project is built using supervised vibe coding: where intuition drives exploration, and discipline shapes what stays.
+
 ## The Problem
 
-I bought a random portable thermal image printer from Shopee and the official app that comes with it sucks — it's bloated, full of ads, and barely functional. So I downloaded the APK, decompiled it, reverse-engineered the BLE data transmission protocol, and built my own replacement.
+I bought a random portable thermal image printer from Shopee, planning to print some pictures for my journal. When it arrived, I installed the official app - despite having a beautiful UI, it's extremely bloated with features I don't need. Being a geek, I had to dig deeper. So I downloaded the APK, decompiled it, and with the help of ChatGPT, Claude Opus and Deepseek, I reverse-engineered the BLE data transmission protocol and built my own replacement.
 
 ## The Solution
 
-ThermPrint is a lightweight web app that lets you print images and QR codes directly to your BLE thermal printer from your browser. Zero ads, zero bloat, fully open-source.
+The result is a lightweight, clean, and minimalistic web app that lets you print images and QR codes directly to your BLE thermal printer from your browser. No ads, no bloat, no nonsense. Open-sourced - tweak it however you want.
 
 ## ✨ Features
 
-- **Image Printing** — Upload any image, adjust contrast/gamma/rotation, preview the result, and send it to your printer
-- **QR Code Printing** — Generate QR codes from URLs with customizable size, style (square, circle, rounded, gapped, vertical/horizontal bars), and optional embedded logo
-- **Real-Time Queue** — Live job status updates via WebSocket with progress bars for active prints
-- **Persistent History** — Print jobs survive server restarts thanks to SQLite storage
-- **Paginated History** — Browse past jobs with load-more pagination, preview thumbnails, and job deletion
-- **BLE Device Management** — Scan for nearby printers, select and persist your device name
-- **Theme Switcher** — Choose from 35+ built-in daisyUI themes, persisted to localStorage
-- **Clean, Minimal UI** — Built with React + Tailwind + DaisyUI, fully responsive for mobile and desktop
+- **Image Printing** - Upload any image, adjust contrast/gamma/rotation, preview the result, and send it to your printer
+- **QR Code Printing** - Generate QR codes from URLs with customizable size, style (square, circle, rounded, gapped, vertical/horizontal bars), and optional embedded logo
+- **Real-Time Queue** - Live job status updates via WebSocket with progress bars for active prints
+- **Persistent History** - Print jobs survive server restarts thanks to SQLite storage, with paginated browsing and preview thumbnails
+- **BLE Device Management** - Scan for nearby printers, select and persist your device name
+- **Theme Switcher** - Choose from 35+ built-in daisyUI themes, persisted to localStorage
+- **Clean, Minimal UI** - Built with React + Tailwind + DaisyUI, fully responsive for mobile and desktop
 
 ## 🖥 Screenshots
 
