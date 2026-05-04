@@ -46,3 +46,6 @@ venv.bak/
 .ruff_cache/
 *.pyc
 
+# App data (auto-generated JSON configs and SQLite DB)
+server/app/data/
+

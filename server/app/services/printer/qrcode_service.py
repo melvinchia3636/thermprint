@@ -6,10 +6,8 @@ creates a print job.  Also provides a standalone preview function used by the
 ``POST /api/qrcode/preview`` endpoint.
 """
 
-import json
 import logging
 from io import BytesIO
-from pathlib import Path
 
 import qrcode
 from PIL import Image
@@ -26,18 +24,20 @@ from qrcode.image.styles.moduledrawers.pil import (
 from qrcode.image.styles.colormasks import SolidFillColorMask
 
 from thermal_printer.image_processor import gray_to_nibbles
-from server.app.schemas.print_settings import PrintSettings
 from server.app.schemas.preview import PreviewResponse
 from server.app.services.jobs.job_manager import JobManager, JobType
 
 logger = logging.getLogger(__name__)
 
-_QR_SETTINGS_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "qrcode.json"
-
-
-def _load_qr_settings() -> PrintSettings:
-    with open(_QR_SETTINGS_PATH) as f:
-        return PrintSettings(**json.load(f))
+_QR_SETTINGS = {
+    "width": 384,
+    "quality": 16,
+    "speed": 255,
+    "energy": 0,
+    "chunk_rows": 20,
+    "chunk_delay": 0.15,
+    "feed": 50,
+}
 
 
 def _auto_box_size(modules_count: int, target: int) -> int:
@@ -110,8 +110,8 @@ def print_qr_code(url: str, size: int, job_manager: JobManager, ble_device_name:
     The QR-code image is centred on the printer-width canvas and nibble-encoded
     before being passed to ``job_manager.create_job``.
     """
-    settings = _load_qr_settings()
-    printer_width = settings.width
+    settings = _QR_SETTINGS
+    printer_width = settings["width"]
     size = max(50, min(printer_width, size))
 
     img, size = _generate_qr_image(url, size, style, embed_image)
@@ -133,12 +133,12 @@ def print_qr_code(url: str, size: int, job_manager: JobManager, ble_device_name:
         width=printer_width,
         settings={
             "ble_device_name": ble_device_name,
-            "quality": settings.quality,
-            "speed": settings.speed,
-            "energy": settings.energy,
-            "chunk_rows": settings.chunk_rows,
-            "chunk_delay": settings.chunk_delay,
-            "feed": settings.feed,
+            "quality": settings["quality"],
+            "speed": settings["speed"],
+            "energy": settings["energy"],
+            "chunk_rows": settings["chunk_rows"],
+            "chunk_delay": settings["chunk_delay"],
+            "feed": settings["feed"],
         },
         preview_image=preview_image,
     )
