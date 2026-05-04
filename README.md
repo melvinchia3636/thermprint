@@ -2,14 +2,15 @@
 
 <p align="center">A lightweight, open-source web app for printing images and QR codes to BLE thermal printers. No ads, no bloat, no nonsense.</p>
 
+>[!NOTE]  
 > **On Supervised Vibe Coding**  
 > This project is built using supervised vibe coding: where intuition drives exploration, and discipline shapes what stays.
 
-## The Problem
+## 🤔 The Problem
 
 I bought a random portable thermal image printer from Shopee, planning to print some pictures for my journal. When it arrived, I installed the official app - despite having a beautiful UI, it's extremely bloated with features I don't need. Being a geek, I had to dig deeper. So I downloaded the APK, decompiled it, and with the help of ChatGPT, Claude Opus and Deepseek, I reverse-engineered the BLE data transmission protocol and built my own replacement.
 
-## The Solution
+## ✅ The Solution
 
 The result is a lightweight, clean, and minimalistic web app that lets you print images and QR codes directly to your BLE thermal printer from your browser. No ads, no bloat, no nonsense. Open-sourced - tweak it however you want.
 
@@ -26,8 +27,12 @@ The result is a lightweight, clean, and minimalistic web app that lets you print
 ## 🖥 Screenshots
 
 <div>
-  <img width="49%" alt="ThermPrint preview" src="https://placehold.co/800x600/1a1a2e/eaeaea?text=ThermPrint+Screenshot">
-  <img width="49%" alt="ThermPrint queue" src="https://placehold.co/800x600/16213e/eaeaea?text=Print+Queue">
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/447cd641-7b37-43ac-8164-629715b9a731" />
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/e99cd99f-a7ae-442b-a420-0dfbd499906a" />
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/a4df5b8b-5c17-4797-94d5-8be519c08a28" />
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/fa9c3160-438f-4c1a-a916-2d3d12258094" />
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/fbc41f2e-6276-44a4-b762-49f6b00b106e" />
+  <img width="49%" alt="image" src="https://github.com/user-attachments/assets/f59473a4-2aa3-41e9-81ac-f74a11eb87ee" />
 </div>
 
 ## 🔬 Technologies Used
@@ -51,15 +56,15 @@ The result is a lightweight, clean, and minimalistic web app that lets you print
 
 - Python 3.10+
 - Node.js 18+
-- A BLE-compatible thermal printer
+- The thermal printer that supports this specific protocol
 
 ### Backend
 
 ```bash
 cd server
-python -m venv .venv
+uv venv
 source .venv/bin/activate
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 uvicorn server.app.main:app --reload --port 8000
 ```
 
@@ -67,8 +72,8 @@ uvicorn server.app.main:app --reload --port 8000
 
 ```bash
 cd client
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 Open `http://localhost:5173` in your browser.
@@ -101,9 +106,20 @@ pytest
 | `WS` | `/api/ws/jobs` | Real-time job updates |
 | `WS` | `/api/ws/status` | Real-time connection status |
 
+The interactive Swagger UI is available at `http://localhost:8000/docs` when the backend server is running, providing a convenient way to explore and test every endpoint directly from your browser.
+
 ## 📈 Status
 
-This project is actively maintained. If any bugs are found, please file an issue on GitHub, and I'll resolve it ASAP.
+All the core functions for this project have been completed. If you happen to find any bugs, feel free to file an issue in this GitHub Repo.
+
+## 🙏 Credits
+
+This project wouldn't exist without the help of several AI tools and resources:
+
+- **[ChatGPT](https://chatgpt.com)** - Assisted with initial APK decompilation analysis and BLE protocol discovery
+- **[Claude Opus](https://antigravity.ai)** via Antigravity - Codebase deep-dive, algorithm and protocol porting from the decompiled APK
+- **[Deepseek](https://opencode.ai)** via OpenCode - Assisted with construction of the backend server and frontend interface
+- **[This Article](https://github.com/erkanybekov/BlutoothLan)** - A project similar to mine, but an iOS app built on top of Swift. For giving me motivation and the prove of feasibility
 
 ## 🛒 Buy the Printer
 
@@ -111,5 +127,4 @@ This project was built for the [portable thermal printer available on Shopee](ht
 
 ## 📄 License
 
-Copyright © 2026 Melvin Chia  
-Licensed under MIT.
+This project is licensed under the MIT License.
