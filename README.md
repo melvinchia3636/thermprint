@@ -10,6 +10,17 @@ I bought a random portable thermal image printer from Shopee and the official ap
 
 ThermPrint is a lightweight web app that lets you print images and QR codes directly to your BLE thermal printer from your browser. Zero ads, zero bloat, fully open-source.
 
+## ✨ Features
+
+- **Image Printing** — Upload any image, adjust contrast/gamma/rotation, preview the result, and send it to your printer
+- **QR Code Printing** — Generate QR codes from URLs with customizable size, style (square, circle, rounded, gapped, vertical/horizontal bars), and optional embedded logo
+- **Real-Time Queue** — Live job status updates via WebSocket with progress bars for active prints
+- **Persistent History** — Print jobs survive server restarts thanks to SQLite storage
+- **Paginated History** — Browse past jobs with load-more pagination, preview thumbnails, and job deletion
+- **BLE Device Management** — Scan for nearby printers, select and persist your device name
+- **Theme Switcher** — Choose from 35+ built-in daisyUI themes, persisted to localStorage
+- **Clean, Minimal UI** — Built with React + Tailwind + DaisyUI, fully responsive for mobile and desktop
+
 ## 🖥 Screenshots
 
 <div>
