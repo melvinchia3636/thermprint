@@ -1,15 +1,19 @@
 """Device-related endpoints.
 
-* ``GET  /api/device`` — return the currently configured BLE device name
-* ``PUT  /api/device`` — persist a new BLE device name
-* ``GET  /api/devices`` — scan for nearby BLE printers
+* ``GET  /api/device`` - return the currently configured BLE device name
+* ``PUT  /api/device`` - persist a new BLE device name
+* ``GET  /api/devices`` - scan for nearby BLE printers
 """
 
 from fastapi import APIRouter, Depends, Request
 from bleak import BleakScanner
 
 from server.app.services.stores.device_store import DeviceStore
-from server.app.schemas.device import DeviceInfo, DeviceListResponse, DeviceConfigResponse
+from server.app.schemas.device import (
+    DeviceInfo,
+    DeviceListResponse,
+    DeviceConfigResponse,
+)
 
 router = APIRouter(prefix="/api", tags=["Device"])
 

@@ -23,7 +23,7 @@ class PrintJob:
     """In-memory representation of a queued / active print job.
 
     ``nibble_data``, ``cancel_event``, and the Python object identity are
-    transient — they only exist while the job is in the active queue.
+    transient - they only exist while the job is in the active queue.
     Everything else is mirrored to the database.
     """
 
@@ -89,7 +89,14 @@ class JobManager:
                 pass
         await self._db.stop()
 
-    def create_job(self, job_type: JobType, nibble_data: bytes, width: int, settings: dict, preview_image: bytes | None = None) -> PrintJob:
+    def create_job(
+        self,
+        job_type: JobType,
+        nibble_data: bytes,
+        width: int,
+        settings: dict,
+        preview_image: bytes | None = None,
+    ) -> PrintJob:
         """Create a new print job, enqueue it, persist to DB, and notify subscribers."""
         job = PrintJob(
             job_id=str(uuid.uuid4()),
@@ -118,7 +125,9 @@ class JobManager:
         """Return the in-memory job, or ``None`` if it does not exist."""
         return self._jobs.get(job_id)
 
-    async def list_jobs(self, offset: int = 0, limit: int = 50) -> tuple[list[JobStatusResponse], int]:
+    async def list_jobs(
+        self, offset: int = 0, limit: int = 50
+    ) -> tuple[list[JobStatusResponse], int]:
         """Return a paginated list and total count."""
         return await self._db.list_jobs(offset, limit)
 
@@ -133,13 +142,19 @@ class JobManager:
         job.progress = None
         job.cancel_event.set()
         self._notify(job)
-        asyncio.ensure_future(self._db.update_job(job_id, status=JobStatus.cancelled, progress=None))
+        asyncio.ensure_future(
+            self._db.update_job(job_id, status=JobStatus.cancelled, progress=None)
+        )
         return True
 
     async def delete_job(self, job_id: str) -> bool:
         """Delete a job from the database. Only allowed for terminal jobs."""
         job = self._jobs.get(job_id)
-        if job and job.status not in (JobStatus.done, JobStatus.failed, JobStatus.cancelled):
+        if job and job.status not in (
+            JobStatus.done,
+            JobStatus.failed,
+            JobStatus.cancelled,
+        ):
             return False
         self._jobs.pop(job_id, None)
         return await self._db.delete_job(job_id)
@@ -174,7 +189,9 @@ class JobManager:
                     if not job.cancel_event.is_set():
                         job.status = JobStatus.printing
                         self._notify(job)
-                        asyncio.ensure_future(self._db.update_job(job_id, status=JobStatus.printing))
+                        asyncio.ensure_future(
+                            self._db.update_job(job_id, status=JobStatus.printing)
+                        )
 
                 await self._printer_manager.print_job(
                     nibble_data=job.nibble_data,
@@ -188,11 +205,15 @@ class JobManager:
                     job.status = JobStatus.done
                     job.progress = None
                     self._notify(job)
-                    await self._db.update_job(job_id, status=JobStatus.done, progress=None)
+                    await self._db.update_job(
+                        job_id, status=JobStatus.done, progress=None
+                    )
                     logger.info("Job %s completed", job_id)
             except Exception as exc:
                 job.status = JobStatus.failed
                 job.error = str(exc)
                 self._notify(job)
-                await self._db.update_job(job_id, status=JobStatus.failed, error=str(exc))
+                await self._db.update_job(
+                    job_id, status=JobStatus.failed, error=str(exc)
+                )
                 logger.error("Job %s failed: %s", job_id, exc)

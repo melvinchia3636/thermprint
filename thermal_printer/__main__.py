@@ -1,3 +1,9 @@
+"""CLI entry point for direct printer usage without the FastAPI server.
+
+Usage:
+    python -m thermal_printer image.png [--device X5h-10B5] [--preview]
+"""
+
 import argparse
 import asyncio
 

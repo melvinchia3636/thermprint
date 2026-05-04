@@ -16,6 +16,17 @@ export default function ProjectDescModal({
           <Icon icon="tabler:info-circle" className="size-5" />
           About ThermPrint
         </h3>
+        <div
+          role="alert"
+          className="alert mb-2 mt-4 alert-info alert-soft gap-2!"
+        >
+          <Icon icon="tabler:shield-code" className="size-5 shrink-0" />
+          <span>
+            <h4 className="font-semibold mb-1">On Supervised Vibe Coding</h4>
+            This project is built using supervised vibe coding: where intuition
+            drives exploration, and discipline shapes what stays.
+          </span>
+        </div>
         <div className="py-4 space-y-4 text-sm">
           <p>
             The reason why this project exists? Well, I bought a random portable
@@ -73,12 +84,12 @@ export default function ProjectDescModal({
           <div className="space-y-2">
             <h4 className="font-semibold">Tech Stack</h4>
             <ul className="list-disc list-inside text-base-content/70 space-y-1">
-              <li>FastAPI (Python) — backend API & WebSocket</li>
-              <li>React + TypeScript — frontend</li>
-              <li>Bleak — BLE communication</li>
-              <li>Pillow — image processing</li>
-              <li>SQLite — job history persistence</li>
-              <li>DaisyUI + Tailwind — UI styling</li>
+              <li>FastAPI (Python) - backend API & WebSocket</li>
+              <li>React + TypeScript - frontend</li>
+              <li>Bleak - BLE communication</li>
+              <li>Pillow - image processing</li>
+              <li>SQLite - job history persistence</li>
+              <li>DaisyUI + Tailwind - UI styling</li>
             </ul>
           </div>
           <div className="divider mt-0" />
