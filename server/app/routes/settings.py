@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request
 
 from server.app.schemas.print_settings import PrintSettings
-from server.app.services.settings_store import SettingsStore
+from server.app.services.stores.settings_store import SettingsStore
 
 router = APIRouter(prefix="/api", tags=["Settings"])
 

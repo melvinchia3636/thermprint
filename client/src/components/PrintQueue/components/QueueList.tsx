@@ -3,7 +3,7 @@ import { useJobContext } from "../../../context/JobContext";
 import QueueListItem from "./QueueListItem";
 
 export default function QueueList() {
-  const { jobsData, cancelJob } = useJobContext();
+  const { jobsData, cancelJob, deleteJob, hasMore, loadMore } = useJobContext();
 
   return (
     <>
@@ -31,8 +31,14 @@ export default function QueueList() {
               key={j.job_id}
               job={j}
               onCancel={(id) => cancelJob.mutate(id)}
+              onDelete={(id) => deleteJob.mutate(id)}
             />
           ))}
+          {hasMore && (
+            <button onClick={loadMore} className="btn btn-ghost btn-sm w-full mt-2">
+              Load more
+            </button>
+          )}
         </div>
       )}
     </>

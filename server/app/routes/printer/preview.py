@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, UploadFile, File
 
 from server.app.schemas.print_settings import PrintSettings
 from server.app.schemas.preview import PreviewResponse
-from server.app.services.preview_service import process_preview_image
-from server.app.routes._forms import parse_print_settings
+from server.app.services.printer.preview_service import process_preview_image
+from server.app.routes.forms import parse_print_settings
 
 router = APIRouter(prefix="/api", tags=["Preview"])
 

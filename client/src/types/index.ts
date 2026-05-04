@@ -22,6 +22,7 @@ export interface JobStatusResponse {
   progress: string | null;
   error: string | null;
   created_at: string;
+  preview_url?: string;
 }
 
 export interface PreviewResponse {
@@ -38,6 +39,10 @@ export interface PrintResponse {
 export interface DeviceInfo {
   name: string | null;
   address: string;
+}
+
+export interface DeviceConfig {
+  ble_device_name: string;
 }
 
 export interface DeviceStatusResponse {

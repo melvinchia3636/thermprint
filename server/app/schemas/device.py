@@ -8,3 +8,7 @@ class DeviceInfo(BaseModel):
 
 class DeviceListResponse(BaseModel):
     devices: list[DeviceInfo] = Field(description="List of discovered BLE devices")
+
+
+class DeviceConfigResponse(BaseModel):
+    ble_device_name: str = Field(description="Currently configured BLE printer name")

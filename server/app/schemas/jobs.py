@@ -30,10 +30,12 @@ class JobStatusResponse(BaseModel):
     progress: str | None = Field(default=None, description="Progress description, e.g. '3/10 chunks'")
     error: str | None = Field(default=None, description="Error message if failed")
     created_at: datetime = Field(description="Job creation timestamp")
+    preview_url: str | None = Field(default=None, description="Base64 data URL of the preview image")
 
 
 class JobListResponse(BaseModel):
     jobs: list[JobStatusResponse] = Field(description="List of jobs, newest first")
+    total: int = Field(description="Total number of jobs")
 
 
 class QRCodeRequest(BaseModel):

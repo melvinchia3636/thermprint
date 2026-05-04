@@ -1,3 +1,11 @@
+"""BLE printer connection management.
+
+Handles device discovery, connection, disconnection, and the actual print-job
+protocol (sending chunked nibble data as BLE GATT writes).  Exposes
+:class:`ConnectionStatus` and a :class:`BroadcastService` so the frontend can
+receive live connection-state updates over WebSocket.
+"""
+
 import asyncio
 import logging
 from enum import Enum
@@ -14,18 +22,22 @@ from thermal_printer.protocol import (
     get_dev_state,
     build_gray_scan_packet,
 )
-from server.app.services.broadcast import BroadcastService
+from server.app.services.jobs.broadcast import BroadcastService
 
 logger = logging.getLogger(__name__)
 
 
 class ConnectionStatus(str, Enum):
+    """Reflects the current BLE link state."""
+
     offline = "offline"
     connecting = "connecting"
     online = "online"
 
 
 class PrinterManager:
+    """Manages the BLE connection to the thermal printer and executes print jobs."""
+
     def __init__(self):
         self._device: PrinterDevice | None = None
         self._current_name_filter: str | None = None
@@ -42,12 +54,21 @@ class PrinterManager:
         self._broadcast.publish(value.value)
 
     def subscribe_status(self) -> asyncio.Queue[str]:
+        """Return a new subscriber queue that receives connection-status strings.
+
+        The current status is enqueued immediately on subscribe.
+        """
         return self._broadcast.subscribe(self._status.value)
 
     def unsubscribe_status(self, q: asyncio.Queue[str]):
+        """Remove a previously registered status subscriber."""
         self._broadcast.unsubscribe(q)
 
     async def ensure_connected(self, name_filter: str) -> PrinterDevice:
+        """Return an active BLE connection to the named printer, reconnecting if necessary.
+
+        Up to 5 reconnection attempts are made before raising.
+        """
         if self._device is not None and self._current_name_filter == name_filter:
             try:
                 await self._device.send(b"")
@@ -108,6 +129,11 @@ class PrinterManager:
         cancel_event=None,
         connection_callback=None,
     ):
+        """Send a full print job to the connected printer.
+
+        Retries once on service-discovery failures.  Reports progress via
+        *progress_callback* and respects *cancel_event* for early termination.
+        """
         for attempt in range(2):
             try:
                 device = await self.ensure_connected(ble_device_name)
@@ -176,6 +202,7 @@ class PrinterManager:
                 raise
 
     async def disconnect(self):
+        """Close the BLE connection and reset state to offline."""
         if self._device:
             try:
                 await self._device.close()
