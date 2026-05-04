@@ -1,5 +1,5 @@
-import { useUpdateSettings } from "../../hooks/usePrinter";
-import { useApp } from "../../context/AppContext";
+import { useUpdateSettings } from "../../../../api/settings";
+import { useApp } from "../../../../context/AppContext";
 import StepCard from "../../components/StepCard";
 import FieldGroup from "./components/FieldGroup";
 import { IMAGE_FIELDS, PRINTER_FIELDS } from "./constants/fields";

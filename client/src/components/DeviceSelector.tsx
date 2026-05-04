@@ -2,12 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useApp } from "../context/AppContext";
 
-interface Props {
+export default function DeviceSelector({ open, onClose }: {
   open: boolean;
   onClose: () => void;
-}
-
-export default function DeviceSelector({ open, onClose }: Props) {
+}) {
   const { devices, refreshDevices, localSettings, setLocalSettings, defaults } =
     useApp();
   const [scanning, setScanning] = useState(false);
@@ -36,7 +34,7 @@ export default function DeviceSelector({ open, onClose }: Props) {
   return (
     <dialog ref={ref} className="modal" onClose={onClose}>
       <div className="modal-box">
-        <div className="flex items-center justify-between gap-8">
+        <header className="flex items-center justify-between gap-8">
           <h3 className="font-bold text-xl flex items-center gap-2">
             <Icon icon="tabler:bluetooth" className="size-6 shrink-0" />
             Select Bluetooth Device
@@ -44,7 +42,7 @@ export default function DeviceSelector({ open, onClose }: Props) {
           <button onClick={onClose} className="btn btn-ghost">
             <Icon icon="tabler:x" className="size-4 shrink-0" />
           </button>
-        </div>
+        </header>
 
         <div className="py-6">
           {!devices || devices.length === 0 ? (

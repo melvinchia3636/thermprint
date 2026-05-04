@@ -7,7 +7,7 @@ from server.app.schemas.print_settings import PrintSettings
 
 logger = logging.getLogger(__name__)
 
-_SETTINGS_PATH = Path(__file__).resolve().parent.parent.parent / "settings.json"
+_SETTINGS_PATH = Path(__file__).resolve().parent.parent / "configs" / "image.json"
 
 
 class SettingsStore:

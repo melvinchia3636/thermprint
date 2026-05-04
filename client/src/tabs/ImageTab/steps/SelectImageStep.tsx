@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Icon } from "@iconify/react";
-import { useApp } from "../context/AppContext";
+import { useApp } from "../../../context/AppContext";
 import StepCard from "../components/StepCard";
 
 export default function SelectImageStep() {
@@ -22,7 +22,7 @@ export default function SelectImageStep() {
       nextDisabled={!image}
       nextLabel="Next: Settings"
     >
-      <div
+      <figure
         className="border-2 border-dashed flex-1 border-base-content/30 rounded-box w-full cursor-pointer min-h-0 flex flex-col items-center justify-center p-4"
         onClick={() => inputRef.current?.click()}
       >
@@ -45,7 +45,7 @@ export default function SelectImageStep() {
             Click to select an image
           </span>
         )}
-      </div>
+      </figure>
     </StepCard>
   );
 }

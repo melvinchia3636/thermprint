@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
-import { usePreview, usePrint } from "../hooks/usePrinter";
-import { useApp } from "../context/AppContext";
+import { useApp } from "../../../context/AppContext";
 import StepCard from "../components/StepCard";
+import { usePreview, usePrint } from "../../../api/print";
 
 export default function PreviewPrintStep() {
   const { image, setStep, setImage, localSettings, defaults } = useApp();
@@ -50,11 +50,13 @@ export default function PreviewPrintStep() {
             <span className="loading loading-spinner loading-lg" />
           </div>
         ) : lastPreview ? (
-          <img
-            src={lastPreview}
-            alt="print preview"
-            className="h-full object-contain"
-          />
+          <figure className="h-full w-full flex items-center justify-center">
+            <img
+              src={lastPreview}
+              alt="print preview"
+              className="h-full object-contain"
+            />
+          </figure>
         ) : (
           <div className="flex items-center justify-center h-48 text-base-content/30 flex-col gap-2">
             <Icon icon="tabler:eye-off" className="text-3xl" />

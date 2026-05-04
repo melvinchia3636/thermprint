@@ -12,10 +12,13 @@ export interface PrintSettings {
   feed: number;
 }
 
-export type JobStatus = "queued" | "printing" | "done" | "failed";
+export type JobStatus = "queued" | "connecting" | "printing" | "done" | "failed" | "cancelled";
+
+export type JobType = "image" | "qr_code";
 
 export interface JobStatusResponse {
   job_id: string;
+  type: JobType;
   status: JobStatus;
   progress: string | null;
   error: string | null;
@@ -36,4 +39,8 @@ export interface PrintResponse {
 export interface DeviceInfo {
   name: string | null;
   address: string;
+}
+
+export interface DeviceStatusResponse {
+  connection: "offline" | "connecting" | "online";
 }

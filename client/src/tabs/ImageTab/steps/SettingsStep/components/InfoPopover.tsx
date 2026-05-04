@@ -1,12 +1,7 @@
 import { Tooltip } from "react-tooltip";
 import { Icon } from "@iconify/react";
 
-interface Props {
-  description: string;
-  id: string;
-}
-
-export default function InfoPopover({ description, id }: Props) {
+export default function InfoPopover({ description, id }: { description: string; id: string }) {
   return (
     <>
       <span

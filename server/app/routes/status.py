@@ -1,7 +1,5 @@
 from fastapi import APIRouter, Request
 
-from server.app.services.printer_service import ConnectionStatus
-
 router = APIRouter(prefix="/api", tags=["Status"])
 
 

@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { useApp } from "../context/AppContext";
+import { useApp } from "../../../context/AppContext";
 
 const STEPS = [
   { label: "Select", icon: "tabler:photo" },
@@ -11,7 +11,7 @@ export default function StepNav() {
   const { step, setStep } = useApp();
 
   return (
-    <ul className="flex items-end w-full gap-2">
+    <nav aria-label="Step progress"><ul className="flex items-end w-full gap-2">
       {STEPS.map((s, i) => (
         <li
           key={s.label}
@@ -33,6 +33,6 @@ export default function StepNav() {
           />
         </li>
       ))}
-    </ul>
+    </ul></nav>
   );
 }

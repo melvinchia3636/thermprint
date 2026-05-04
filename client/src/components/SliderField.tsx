@@ -1,14 +1,4 @@
-import InfoPopover from "./InfoPopover";
-
-interface Props {
-  label: string;
-  description?: string;
-  value: number;
-  min?: number;
-  max?: number;
-  step?: number;
-  onChange: (v: number) => void;
-}
+import InfoPopover from "../tabs/ImageTab/steps/SettingsStep/components/InfoPopover";
 
 export default function SliderField({
   label,
@@ -18,20 +8,28 @@ export default function SliderField({
   max,
   step,
   onChange,
-}: Props) {
+}: {
+  label: string;
+  description?: string;
+  value: number;
+  min?: number;
+  max?: number;
+  step?: number;
+  onChange: (v: number) => void;
+}) {
   return (
-    <div className="flex flex-col gap-1.5 p-3 rounded-box bg-base-300/50">
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5 min-w-0">
+    <label className="flex flex-col gap-1.5 p-3 rounded-box bg-base-300/50">
+      <span className="flex items-center justify-between gap-2">
+        <span className="flex items-center gap-1.5 min-w-0">
           <span className="text-sm font-medium text-base-content truncate">
             {label}
           </span>
           {description && <InfoPopover description={description} id={label} />}
-        </div>
+        </span>
         <span className="text-sm font-mono font-semibold text-base-content shrink-0 min-w-[3ch] text-right">
           {value}
         </span>
-      </div>
+      </span>
       <input
         type="range"
         value={value}
@@ -41,6 +39,6 @@ export default function SliderField({
         onChange={(e) => onChange(Number(e.target.value))}
         className="range w-full range-sm"
       />
-    </div>
+    </label>
   );
 }

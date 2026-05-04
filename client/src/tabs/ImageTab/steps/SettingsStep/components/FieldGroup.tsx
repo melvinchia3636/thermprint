@@ -1,7 +1,7 @@
-import type { PrintSettings } from "../../../types";
+import type { PrintSettings } from "../../../../../types";
 import type { FieldDef } from "../constants/fields";
-import SliderField from "./SliderField";
-import SelectField from "./SelectField";
+import SliderField from "../../../../../components/SliderField";
+import SelectField from "../../../../../components/SelectField";
 import { Icon } from "@iconify/react";
 
 export default function FieldGroup({
@@ -20,7 +20,7 @@ export default function FieldGroup({
   alertMsg?: string;
 }) {
   return (
-    <div>
+    <section>
       <h3 className="text-sm font-semibold text-base-content/70 flex items-center gap-1 mb-3">
         <Icon icon={icon} className="size-4" />
         {title}
@@ -56,6 +56,6 @@ export default function FieldGroup({
           ),
         )}
       </div>
-    </div>
+    </section>
   );
 }

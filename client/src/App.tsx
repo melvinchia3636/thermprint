@@ -1,46 +1,53 @@
 import { AppProvider, useApp } from "./context/AppContext";
 import { QueueDrawerProvider } from "./context/QueueDrawerContext";
-import SelectImageStep from "./steps/SelectImageStep";
-import SettingsStep from "./steps/SettingsStep";
-import PreviewPrintStep from "./steps/PreviewPrintStep";
 import {
   PrintQueueDesktopView,
   QueueDrawerWrapper,
 } from "./components/PrintQueue";
 import Header from "./components/Header";
-import StepNav from "./components/StepNav";
 import LoadingScreen from "./components/LoadingScreen";
-
-const STEPS = [
-  { component: SelectImageStep },
-  { component: SettingsStep },
-  { component: PreviewPrintStep },
-];
+import TabbedContent from "./tabs";
+import { ToastContainer } from "react-toastify";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function AppContent() {
-  const { step, defaults } = useApp();
+  const { defaults } = useApp();
   if (!defaults) return <LoadingScreen />;
 
   return (
     <QueueDrawerWrapper>
       <Header />
-      <div className="flex-1 min-h-0 max-w-6xl mx-auto p-6 flex gap-6 items-stretch w-full">
-        <div className="flex-1 min-h-0 flex flex-col space-y-6">
-          <StepNav />
-          {STEPS.map((s, i) => i === step && <s.component />)}
-        </div>
+      <main className="flex-1 min-h-0 max-w-6xl mx-auto p-6 flex gap-6 items-stretch w-full">
+        <TabbedContent />
         <PrintQueueDesktopView />
-      </div>
+      </main>
+      <footer className="text-base-content/30 text-center pb-6 text-sm px-8">
+        Made with 🖤 by{" "}
+        <a
+          href="https://melvinchia.dev"
+          rel="noreferrer noopener"
+          target="_blank"
+          className="underline text-secondary"
+        >
+          Melvin Chia
+        </a>
+        . 0.087x liver consumed. Project under MIT License.
+      </footer>
     </QueueDrawerWrapper>
   );
 }
 
+const qc = new QueryClient();
+
 export default function App() {
   return (
-    <AppProvider>
-      <QueueDrawerProvider>
-        <AppContent />
-      </QueueDrawerProvider>
-    </AppProvider>
+    <QueryClientProvider client={qc}>
+      <AppProvider>
+        <QueueDrawerProvider>
+          <AppContent />
+        </QueueDrawerProvider>
+        <ToastContainer position="bottom-center" />
+      </AppProvider>
+    </QueryClientProvider>
   );
 }

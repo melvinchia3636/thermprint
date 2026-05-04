@@ -2,11 +2,7 @@ import { type ReactNode } from "react";
 import { useQueueDrawer } from "../../../context/QueueDrawerContext";
 import PrintQueueMobileView from "../views/mobile";
 
-interface Props {
-  children: ReactNode;
-}
-
-export default function QueueDrawerWrapper({ children }: Props) {
+export default function QueueDrawerWrapper({ children }: { children: ReactNode }) {
   const { queueOpen, setQueueOpen } = useQueueDrawer();
 
   return (

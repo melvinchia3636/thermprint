@@ -14,13 +14,13 @@ const STATUS_CONFIG: Record<
     label: "Online",
   },
   connecting: {
-    icon: "tabler:loader",
-    color: "text-warning",
+    icon: "svg-spinners:180-ring",
+    color: "text-base-content/30",
     label: "Connecting",
   },
   offline: {
     icon: "tabler:circle-filled",
-    color: "text-gray-500",
+    color: "text-base-content/30",
     label: "Offline",
   },
 };
@@ -42,11 +42,11 @@ export default function Header() {
               icon="tabler:receipt"
               className="text-primary size-6 lg:size-8"
             />
-            <div>
+            <div className="flex flex-col">
               <h1>ThermPrint</h1>
-              <p className="text-xs text-base-content/50 font-medium -mt-1">
+              <small className="text-xs text-base-content/50 font-medium">
                 A reverse eng. project
-              </p>
+              </small>
             </div>
           </div>
           <div className="flex items-center gap-2">

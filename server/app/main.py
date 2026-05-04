@@ -11,7 +11,7 @@ from server.app.services.printer_service import PrinterManager
 from server.app.services.job_manager import JobManager
 from server.app.services.settings_store import SettingsStore
 from server.app.error_handlers import validation_exception_handler
-from server.app.routes import preview, print, jobs, devices, status
+from server.app.routes import preview, print, jobs, devices, status, ws, settings, qrcode
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
@@ -55,5 +55,8 @@ app.include_router(print.router)
 app.include_router(jobs.router)
 app.include_router(devices.router)
 app.include_router(status.router)
+app.include_router(ws.router)
+app.include_router(settings.router)
+app.include_router(qrcode.router)
 
 app.add_exception_handler(RequestValidationError, validation_exception_handler)

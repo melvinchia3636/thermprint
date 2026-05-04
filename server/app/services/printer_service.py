@@ -14,6 +14,7 @@ from thermal_printer.protocol import (
     get_dev_state,
     build_gray_scan_packet,
 )
+from server.app.services.broadcast import BroadcastService
 
 logger = logging.getLogger(__name__)
 
@@ -29,22 +30,34 @@ class PrinterManager:
         self._device: PrinterDevice | None = None
         self._current_name_filter: str | None = None
         self._status: ConnectionStatus = ConnectionStatus.offline
+        self._broadcast = BroadcastService()
 
     @property
     def status(self) -> ConnectionStatus:
         return self._status
 
+    @status.setter
+    def status(self, value: ConnectionStatus):
+        self._status = value
+        self._broadcast.publish(value.value)
+
+    def subscribe_status(self) -> asyncio.Queue[str]:
+        return self._broadcast.subscribe(self._status.value)
+
+    def unsubscribe_status(self, q: asyncio.Queue[str]):
+        self._broadcast.unsubscribe(q)
+
     async def ensure_connected(self, name_filter: str) -> PrinterDevice:
         if self._device is not None and self._current_name_filter == name_filter:
             try:
                 await self._device.send(b"")
-                self._status = ConnectionStatus.online
+                self.status = ConnectionStatus.online
                 return self._device
             except (BleakError, AttributeError, OSError):
                 logger.warning("BLE connection lost, reconnecting...")
                 await self.disconnect()
         await self.disconnect()
-        self._status = ConnectionStatus.connecting
+        self.status = ConnectionStatus.connecting
         device = PrinterDevice(name_filter)
 
         last_exc = None
@@ -57,14 +70,17 @@ class PrinterManager:
                     await device.connect()
                 except BleakError as exc:
                     if "Service Discovery" in str(exc):
-                        logger.warning("Service discovery failed on connect (attempt %d/5)...", attempt + 1)
+                        logger.warning(
+                            "Service discovery failed on connect (attempt %d/5)...",
+                            attempt + 1,
+                        )
                         await asyncio.sleep(1)
                         await device.disconnect()
                         continue
                     raise
                 self._device = device
                 self._current_name_filter = name_filter
-                self._status = ConnectionStatus.online
+                self.status = ConnectionStatus.online
                 return self._device
             except Exception as exc:
                 last_exc = exc
@@ -72,8 +88,10 @@ class PrinterManager:
                 await asyncio.sleep(1)
                 continue
 
-        self._status = ConnectionStatus.offline
-        raise last_exc or RuntimeError(f"Could not connect to printer '{name_filter}' after 5 attempts")
+        self.status = ConnectionStatus.offline
+        raise last_exc or RuntimeError(
+            f"Could not connect to printer '{name_filter}' after 5 attempts"
+        )
 
     async def print_job(
         self,
@@ -88,10 +106,13 @@ class PrinterManager:
         ble_device_name: str = "X5h-10B5",
         progress_callback=None,
         cancel_event=None,
+        connection_callback=None,
     ):
         for attempt in range(2):
             try:
                 device = await self.ensure_connected(ble_device_name)
+                if connection_callback:
+                    connection_callback()
                 half_width = width // 2
                 chunk_size = half_width * chunk_rows
 
@@ -103,7 +124,10 @@ class PrinterManager:
                     offset = end
 
                 logger.info(
-                    "Printing %d chunks (quality=0x%02X speed=0x%02X)", len(chunks), quality, speed
+                    "Printing %d chunks (quality=0x%02X speed=0x%02X)",
+                    len(chunks),
+                    quality,
+                    speed,
                 )
 
                 if cancel_event and cancel_event.is_set():
@@ -143,7 +167,9 @@ class PrinterManager:
                 msg = str(exc)
                 logger.warning("Print attempt %d failed: %s", attempt + 1, msg)
                 await self.disconnect()
-                if attempt == 0 and ("Service Discovery" in msg or "discovery" in msg.lower()):
+                if attempt == 0 and (
+                    "Service Discovery" in msg or "discovery" in msg.lower()
+                ):
                     logger.info("Retrying after service discovery failure...")
                     await asyncio.sleep(1)
                     continue
@@ -157,4 +183,4 @@ class PrinterManager:
                 pass
             self._device = None
             self._current_name_filter = None
-        self._status = ConnectionStatus.offline
+        self.status = ConnectionStatus.offline

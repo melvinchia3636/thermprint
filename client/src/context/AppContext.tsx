@@ -1,11 +1,7 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import {
-  useSettings,
-  useJobs,
-  useCancelJob,
-  useDevices,
-  useConnectionStatus,
-} from "../hooks/usePrinter";
+import { useSettings } from "../api/settings";
+import { useJobs, useCancelJob } from "../api/jobs";
+import { useDevices, useConnectionStatus } from "../api/devices";
 import type { PrintSettings, DeviceInfo, JobStatusResponse } from "../types";
 
 interface AppContextValue {

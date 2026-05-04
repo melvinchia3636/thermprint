@@ -15,3 +15,7 @@ def get_printer_manager(request: Request) -> PrinterManager:
 
 def get_job_manager(request: Request) -> JobManager:
     return request.app.state.job_manager
+
+
+def get_job_manager_ws(websocket) -> JobManager:
+    return websocket.app.state.job_manager
