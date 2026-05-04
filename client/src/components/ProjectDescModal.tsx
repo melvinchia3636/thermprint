@@ -3,13 +3,15 @@ import { Icon } from "@iconify/react";
 export default function ProjectDescModal({
   open,
   onClose,
+  onChangeTheme,
 }: {
   open: boolean;
   onClose: () => void;
+  onChangeTheme?: () => void;
 }) {
   return (
     <dialog className="modal" open={open} onClose={onClose}>
-      <div className="modal-box">
+      <div className="modal-box max-h-[90dvh] overflow-y-auto">
         <h3 className="font-bold text-lg flex items-center gap-2">
           <Icon icon="tabler:info-circle" className="size-5" />
           About ThermPrint
@@ -51,7 +53,22 @@ export default function ProjectDescModal({
               buy this printer on Shopee
             </a>
           </p>
-
+          <div className="divider mt-0" />
+          <div className="flex flex-col gap-4">
+            If you think the default theme doesn't fit you well, you can change
+            your theme for the app by clicking the button below. Huge credit to
+            Daisyui for all these beautiful builtin theme.
+            <button
+              className="btn btn-primary flex items-center gap-2"
+              onClick={() => {
+                onClose();
+                onChangeTheme?.();
+              }}
+            >
+              <Icon icon="tabler:palette" className="size-4" />
+              Change Theme
+            </button>
+          </div>
           <div className="divider mt-0" />
           <div className="space-y-2">
             <h4 className="font-semibold">Tech Stack</h4>
@@ -64,9 +81,7 @@ export default function ProjectDescModal({
               <li>DaisyUI + Tailwind — UI styling</li>
             </ul>
           </div>
-
           <div className="divider mt-0" />
-
           <p>
             Licensed under MIT. Source code available on{" "}
             <a

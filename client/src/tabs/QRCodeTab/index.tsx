@@ -1,4 +1,4 @@
-import StepNav from "../../components/StepNav";
+import StepNav from "../../components/ui/StepNav";
 import {
   QRCodePrintingProvider,
   useQRCodePrinting,

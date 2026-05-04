@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useImagePrinting } from "../contexts/ImagePrintingContext";
-import StepCard from "../../../components/StepCard";
 import { usePreview, usePrint } from "../../../api/print";
+import StepCard from "../../../components/ui/StepCard";
 
 export default function PreviewPrintStep() {
-  const { image, setStep, setImage, localSettings, defaults } = useImagePrinting();
+  const { image, setStep, setImage, localSettings, defaults } =
+    useImagePrinting();
   const settings = localSettings ?? defaults;
   const previewMutation = usePreview();
   const print = usePrint();

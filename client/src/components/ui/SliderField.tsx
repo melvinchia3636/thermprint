@@ -1,4 +1,4 @@
-import InfoPopover from "../tabs/ImageTab/steps/SettingsStep/components/InfoPopover";
+import InfoPopover from "./InfoPopover";
 
 export default function SliderField({
   label,

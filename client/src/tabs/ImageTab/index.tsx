@@ -1,4 +1,3 @@
-import StepNav from "../../components/StepNav";
 import {
   ImagePrintingProvider,
   useImagePrinting,
@@ -6,7 +5,8 @@ import {
 import PreviewPrintStep from "./steps/PreviewPrintStep";
 import SelectImageStep from "./steps/SelectImageStep";
 import SettingsStep from "./steps/SettingsStep";
-import LoadingScreen from "../../components/LoadingScreen";
+import LoadingScreen from "../../components/ui/LoadingScreen";
+import StepNav from "../../components/ui/StepNav";
 
 const STEPS = [
   { component: SelectImageStep, label: "Select", icon: "tabler:photo" },

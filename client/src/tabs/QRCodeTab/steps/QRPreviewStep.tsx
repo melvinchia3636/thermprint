@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
-import StepCard from "../../../components/StepCard";
 import { useQRPreview, usePrintQRCode } from "../../../api/print";
 import { useQRCodePrinting } from "../context/QRCodePrintingContext";
+import StepCard from "../../../components/ui/StepCard";
 
 export default function QRPreviewStep() {
   const {
@@ -17,9 +17,11 @@ export default function QRPreviewStep() {
   useEffect(() => {
     if (!url) return;
     let cancelled = false;
-    previewMutation.mutateAsync({ url, size, style, embedImage }).then((data) => {
-      if (!cancelled) setPreviewUrl(data.preview_url);
-    });
+    previewMutation
+      .mutateAsync({ url, size, style, embedImage })
+      .then((data) => {
+        if (!cancelled) setPreviewUrl(data.preview_url);
+      });
     return () => {
       cancelled = true;
     };
@@ -27,7 +29,10 @@ export default function QRPreviewStep() {
 
   const handlePrint = () => {
     if (!url) return;
-    printMutation.mutate({ url, size, style, embedImage }, { onSuccess: reset });
+    printMutation.mutate(
+      { url, size, style, embedImage },
+      { onSuccess: reset },
+    );
   };
 
   return (

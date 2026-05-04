@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useImagePrinting } from "../contexts/ImagePrintingContext";
-import StepCard from "../../../components/StepCard";
+import StepCard from "../../../components/ui/StepCard";
 
 export default function SelectImageStep() {
   const { image, setImage, setStep } = useImagePrinting();

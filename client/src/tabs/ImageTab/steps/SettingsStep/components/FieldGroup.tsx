@@ -1,7 +1,7 @@
+import SelectField from "../../../../../components/ui/SelectField";
+import SliderField from "../../../../../components/ui/SliderField";
 import type { PrintSettings } from "../../../../../types";
 import type { FieldDef } from "../constants/fields";
-import SliderField from "../../../../../components/SliderField";
-import SelectField from "../../../../../components/SelectField";
 import { Icon } from "@iconify/react";
 
 export default function FieldGroup({

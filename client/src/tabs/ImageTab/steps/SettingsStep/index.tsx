@@ -1,8 +1,8 @@
 import { useImagePrinting } from "../../contexts/ImagePrintingContext";
-import StepCard from "../../../../components/StepCard";
 import FieldGroup from "./components/FieldGroup";
 import { IMAGE_FIELDS, PRINTER_FIELDS } from "./constants/fields";
 import { useUpdateSettings } from "../../../../api/settings";
+import StepCard from "../../../../components/ui/StepCard";
 
 export default function SettingsStep() {
   const { setStep, localSettings, setLocalSettings, defaults } =

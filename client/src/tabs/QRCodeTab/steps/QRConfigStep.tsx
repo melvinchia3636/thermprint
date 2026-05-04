@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { Icon } from "@iconify/react";
-import StepCard from "../../../components/StepCard";
-import SliderField from "../../../components/SliderField";
-import SelectField from "../../../components/SelectField";
 import { useQRCodePrinting } from "../context/QRCodePrintingContext";
+import SelectField from "../../../components/ui/SelectField";
+import SliderField from "../../../components/ui/SliderField";
+import StepCard from "../../../components/ui/StepCard";
 
 const STYLES = [
   { value: 0, label: "Square" },
