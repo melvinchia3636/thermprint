@@ -14,7 +14,6 @@ class TestPrintEndpoint:
             "/api/print",
             files={"image": ("test.png", test_image, "image/png")},
             data={
-                "ble_device_name": "MyPrinter",
                 "width": 384,
                 "quality": 51,
                 "speed": 20,

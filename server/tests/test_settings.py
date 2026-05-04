@@ -3,7 +3,6 @@ class TestSettingsEndpoint:
         resp = client.get("/api/settings")
         assert resp.status_code == 200
         data = resp.json()
-        assert data["ble_device_name"] == "X5h-10B5"
         assert data["width"] == 384
         assert data["quality"] == 50
         assert data["speed"] == 16
@@ -19,7 +18,6 @@ class TestSettingsEndpoint:
         resp = client.put(
             "/api/settings",
             json={
-                "ble_device_name": "MyPrinter",
                 "width": 500,
                 "quality": 53,
                 "speed": 8,
@@ -34,7 +32,6 @@ class TestSettingsEndpoint:
         )
         assert resp.status_code == 200
         data = resp.json()
-        assert data["ble_device_name"] == "MyPrinter"
         assert data["width"] == 500
         assert data["quality"] == 53
         assert data["speed"] == 8
@@ -51,4 +48,3 @@ class TestSettingsEndpoint:
         assert resp.status_code == 200
         data = resp.json()
         assert data["width"] == 400
-        assert data["ble_device_name"] == "X5h-10B5"

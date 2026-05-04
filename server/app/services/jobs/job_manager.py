@@ -119,7 +119,7 @@ class JobManager:
         return self._jobs.get(job_id)
 
     async def list_jobs(self, offset: int = 0, limit: int = 50) -> tuple[list[JobStatusResponse], int]:
-        """Return a paginated list of all known jobs (from the database)."""
+        """Return a paginated list and total count."""
         return await self._db.list_jobs(offset, limit)
 
     def cancel_job(self, job_id: str) -> bool:

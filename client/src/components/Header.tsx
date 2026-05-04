@@ -29,9 +29,7 @@ const STATUS_CONFIG: Record<
 export default function Header() {
   const [showDialog, setShowDialog] = useState(false);
   const { connection, deviceName } = useDeviceContext();
-  const { jobsData } = useJobContext();
   const { queueOpen, setQueueOpen } = useQueueDrawer();
-  const jobCount = jobsData?.length ?? 0;
   const cfg = STATUS_CONFIG[connection] || STATUS_CONFIG.offline;
 
   return (
@@ -72,20 +70,19 @@ export default function Header() {
                 {deviceName}
               </span>
             </button>
-            <button
-              onClick={() => setQueueOpen(!queueOpen)}
-              className="btn btn-ghost btn-sm btn-square relative lg:hidden"
-            >
-              <Icon icon="tabler:list" className="size-5" />
-              {jobCount > 0 && (
-                <span className="badge badge-primary badge-xs absolute -top-1 -right-1">
-                  {jobCount}
-                </span>
-              )}
+            <button className="btn btn-ghost btn-square">
+              <Icon icon="tabler:info-circle" />
             </button>
           </div>
         </div>
       </header>
+      <button
+        onClick={() => setQueueOpen(!queueOpen)}
+        className="btn btn-primary btn-square fixed bottom-6 right-6 shadow-lg lg:hidden z-50"
+      >
+        <Icon icon="tabler:list" className="size-6" />
+      </button>
+
       <DeviceSelector open={showDialog} onClose={() => setShowDialog(false)} />
     </>
   );

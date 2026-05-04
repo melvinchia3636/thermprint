@@ -2,7 +2,7 @@ class TestJobsEndpoint:
     def test_list_jobs_empty(self, client):
         resp = client.get("/api/jobs")
         assert resp.status_code == 200
-        assert resp.json() == {"jobs": []}
+        assert resp.json() == {"jobs": [], "total": 0}
 
     def test_get_job_not_found(self, client):
         resp = client.get("/api/jobs/nonexistent")
@@ -37,6 +37,7 @@ class TestJobsEndpoint:
         assert resp.status_code == 200
         data = resp.json()
         assert len(data["jobs"]) == 2
+        assert data["total"] == 2
 
     def test_cancel_job(self, client, test_image):
         create_resp = client.post(
@@ -49,8 +50,8 @@ class TestJobsEndpoint:
         assert resp.status_code == 204
 
         get_resp = client.get(f"/api/jobs/{job_id}")
-        assert get_resp.json()["status"] == "done"
-        assert get_resp.json()["progress"] == "cancelled"
+        assert get_resp.json()["status"] == "cancelled"
+        assert get_resp.json()["progress"] is None
 
     def test_cancel_nonexistent_job(self, client):
         resp = client.delete("/api/jobs/nonexistent")

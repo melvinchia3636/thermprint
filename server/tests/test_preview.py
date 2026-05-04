@@ -21,7 +21,6 @@ class TestPreviewEndpoint:
                 "contrast": 1.5,
                 "gamma": 1.2,
                 "rotate": 90,
-                "ble_device_name": "X5h-10B5",
                 "quality": 50,
                 "speed": 16,
                 "energy": 0,
@@ -33,7 +32,6 @@ class TestPreviewEndpoint:
         assert resp.status_code == 200
         data = resp.json()
         assert data["width"] == 384
-        # rotated 100x80 -> 80x384
         assert data["height"] > 0
 
     def test_preview_rejects_non_image(self, client):
@@ -50,7 +48,6 @@ class TestPreviewEndpoint:
             data={
                 "width": 384,
                 "rotate": 180,
-                "ble_device_name": "X5h-10B5",
                 "quality": 50,
                 "speed": 16,
                 "energy": 0,

@@ -11,7 +11,6 @@ from io import BytesIO
 
 import qrcode
 from PIL import Image
-from qrcode.constants import ERROR_CORRECT_H
 from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers.pil import (
     CircleModuleDrawer,
@@ -31,12 +30,12 @@ logger = logging.getLogger(__name__)
 
 _QR_SETTINGS = {
     "width": 384,
-    "quality": 16,
-    "speed": 255,
-    "energy": 0,
+    "quality": 51,
+    "speed": 20,
+    "energy": 5000,
     "chunk_rows": 20,
     "chunk_delay": 0.15,
-    "feed": 50,
+    "feed": 100,
 }
 
 
@@ -59,15 +58,21 @@ def _get_drawer(style: str):
     return cls()
 
 
-def _generate_qr_image(url: str, size: int, style: str = "square", embed_image: bytes | None = None) -> tuple[Image.Image, int]:
+def _generate_qr_image(
+    url: str, size: int, style: str = "square", embed_image: bytes | None = None
+) -> tuple[Image.Image, int]:
     """Build a styled QR-code image (PIL ``Image``) at the requested pixel size.
 
     When *embed_image* is provided the error-correction level is raised to H
     and the image is centre-cropped to a square before being placed in the
     middle of the QR code.
     """
-    error_correction = qrcode.constants.ERROR_CORRECT_H if embed_image else qrcode.constants.ERROR_CORRECT_M
-    qr = qrcode.QRCode(border=2, error_correction=error_correction)
+    qr = qrcode.QRCode(
+        border=2,
+        error_correction=qrcode.constants.ERROR_CORRECT_L
+        if not embed_image
+        else qrcode.constants.ERROR_CORRECT_H,
+    )
     qr.add_data(url)
     qr.make(fit=True)
 
@@ -77,7 +82,11 @@ def _generate_qr_image(url: str, size: int, style: str = "square", embed_image: 
     qr.make(fit=True)
 
     drawer = _get_drawer(style)
-    kw = dict(image_factory=StyledPilImage, module_drawer=drawer, color_mask=SolidFillColorMask())
+    kw = dict(
+        image_factory=StyledPilImage,
+        module_drawer=drawer,
+        color_mask=SolidFillColorMask(),
+    )
 
     if embed_image:
         logo = Image.open(BytesIO(embed_image)).convert("RGBA")
@@ -96,7 +105,9 @@ def _generate_qr_image(url: str, size: int, style: str = "square", embed_image: 
     return img, size
 
 
-def preview_qr_code(url: str, size: int, style: str = "square", embed_image: bytes | None = None) -> PreviewResponse:
+def preview_qr_code(
+    url: str, size: int, style: str = "square", embed_image: bytes | None = None
+) -> PreviewResponse:
     """Generate a preview PNG of the QR code without creating a print job."""
     img, size = _generate_qr_image(url, size, style, embed_image)
     buf = BytesIO()
@@ -104,7 +115,14 @@ def preview_qr_code(url: str, size: int, style: str = "square", embed_image: byt
     return PreviewResponse.from_preview_image(buf, size, size)
 
 
-def print_qr_code(url: str, size: int, job_manager: JobManager, ble_device_name: str = "X5h-10B5", style: str = "square", embed_image: bytes | None = None):
+def print_qr_code(
+    url: str,
+    size: int,
+    job_manager: JobManager,
+    ble_device_name: str = "X5h-10B5",
+    style: str = "square",
+    embed_image: bytes | None = None,
+):
     """Generate a QR code and enqueue it as a new print job.
 
     The QR-code image is centred on the printer-width canvas and nibble-encoded

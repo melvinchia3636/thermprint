@@ -18,7 +18,7 @@ function AppContent() {
         <TabbedContent />
         <PrintQueueDesktopView />
       </main>
-      <footer className="text-base-content/30 text-center pb-6 text-sm px-8">
+      <footer className="text-base-content/30 text-center pb-6 text-xs px-8">
         Made with 🖤 by{" "}
         <a
           href="https://melvinchia.dev"

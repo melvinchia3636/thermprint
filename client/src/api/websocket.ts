@@ -4,9 +4,12 @@ export function useWebSocket<T>(
   path: string,
   onMessage: (data: T) => void,
   wsRef: MutableRefObject<WebSocket | null>,
+  onReconnect?: () => void,
 ) {
   const cbRef = useRef(onMessage);
   cbRef.current = onMessage;
+  const reconnectRef = useRef(onReconnect);
+  reconnectRef.current = onReconnect;
 
   useEffect(() => {
     function connect() {
@@ -20,7 +23,10 @@ export function useWebSocket<T>(
 
       ws.onclose = () => {
         wsRef.current = null;
-        setTimeout(connect, 3000);
+        setTimeout(() => {
+          reconnectRef.current?.();
+          connect();
+        }, 3000);
       };
 
       ws.onerror = () => ws.close();

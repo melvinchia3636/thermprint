@@ -27,38 +27,33 @@ export function useJobs(offset = 0, limit = 10) {
   }>(
     "/api/ws/jobs",
     (update) => {
-      const prev = qc.getQueryData<{
-        jobs: JobStatusResponse[];
-        total: number;
-      }>(["jobs", { offset, limit }]);
-      const existing = prev?.jobs.find((j) => j.job_id === update.job_id);
+      const existing = result.data?.jobs.find(
+        (j) => j.job_id === update.job_id,
+      );
       const wasNotDone = existing && existing.status !== "done";
 
-      qc.setQueryData<{ jobs: JobStatusResponse[]; total: number }>(
-        ["jobs", { offset, limit }],
-        (prev) => {
-          if (!prev) return prev;
-          const idx = prev.jobs.findIndex((j) => j.job_id === update.job_id);
-          const updated: JobStatusResponse = {
-            job_id: update.job_id,
-            type: update.type,
-            status: update.status,
-            progress: update.progress,
-            error: update.error,
-            created_at: update.created_at,
-            preview_url: update.preview_url ?? undefined,
-          };
-          if (idx >= 0) {
-            const next = [...prev.jobs];
-            next[idx] = updated;
-            return { jobs: next, total: prev.total };
-          }
-          if (offset === 0) {
-            return { jobs: [updated, ...prev.jobs], total: prev.total + 1 };
-          }
-          return prev;
-        },
-      );
+      qc.setQueryData<{ jobs: JobStatusResponse[]; total: number }>(["jobs", { offset, limit }], (prev) => {
+        if (!prev) return prev;
+        const idx = prev.jobs.findIndex((j) => j.job_id === update.job_id);
+        const updated: JobStatusResponse = {
+          job_id: update.job_id,
+          type: update.type,
+          status: update.status,
+          progress: update.progress,
+          error: update.error,
+          created_at: update.created_at,
+          preview_url: update.preview_url ?? undefined,
+        };
+        if (idx >= 0) {
+          const next = [...prev.jobs];
+          next[idx] = updated;
+          return { jobs: next, total: prev.total };
+        }
+        if (offset === 0) {
+          return { jobs: [updated, ...prev.jobs], total: prev.total + 1 };
+        }
+        return prev;
+      });
 
       if (update.status === "done" && wasNotDone) {
         toast.success("Print job completed");
@@ -67,6 +62,7 @@ export function useJobs(offset = 0, limit = 10) {
       }
     },
     wsRef,
+    () => qc.invalidateQueries({ queryKey: ["jobs"] }),
   );
 
   return result;
