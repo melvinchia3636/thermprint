@@ -17,7 +17,7 @@ async def print_image(
     job_manager: JobManager = Depends(get_job_manager),
 ):
     nibble_data, width, _, _ = _process_image_data(image, settings)
-
+    print(settings)
     job = job_manager.create_job(
         JobType.image,
         nibble_data=nibble_data,

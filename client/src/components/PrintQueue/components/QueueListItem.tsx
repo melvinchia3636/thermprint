@@ -25,6 +25,9 @@ export default function QueueListItem({
     icon: "tabler:question-mark",
   };
 
+  const typeIcon = job.type === "qr_code" ? "tabler:qrcode" : "tabler:photo";
+  const typeLabel = job.type === "qr_code" ? "QR Code" : "Image";
+
   const progress = chunkProgress(job.progress);
 
   return (
@@ -32,14 +35,22 @@ export default function QueueListItem({
       role="listitem"
       className="flex flex-col gap-1.5 bg-base-300 rounded-box p-3"
     >
-      <div className="flex items-center justify-between gap-2">
-        <span className={`${badge.class} gap-1`}>
-          <Icon icon={badge.icon} className="size-4" />
-          {job.status}
+      <div className="flex items-start justify-between gap-2">
+        <span className="flex items-center gap-2">
+          <span className={`${badge.class} gap-1`}>
+            <Icon icon={badge.icon} className="size-4" />
+            {job.status}
+          </span>
         </span>
-        <span className="text-xs text-base-content/50 whitespace-nowrap">
-          {dayjs(job.created_at).fromNow()}
-        </span>
+        <div className="items-end flex flex-col">
+          <span className="text-xs text-base-content/50 flex items-center gap-1">
+            <Icon icon={typeIcon} className="size-3.5" />
+            {typeLabel}
+          </span>
+          <span className="text-xs text-base-content/50 whitespace-nowrap">
+            {dayjs(job.created_at).fromNow()}
+          </span>
+        </div>
       </div>
       {progress ? (
         <div className="flex flex-col gap-0.5 mt-2">
