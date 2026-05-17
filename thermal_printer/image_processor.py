@@ -1,6 +1,10 @@
+import logging
+
 from PIL import Image, ImageFilter, ImageEnhance
 
 from thermal_printer.protocol import GRAY_LEVELS
+
+logger = logging.getLogger(__name__)
 
 
 def dither_gray_pixels(gray_pixels, width, height):
@@ -158,6 +162,8 @@ def process_image(
     dithered = dither_gray_pixels(pixels, width, height)
     nibble_data = gray_to_nibbles(dithered, width, height)
 
-    print(f"\U0001f4d0 image: {width}x{height}, low={low_percentile} high={high_percentile}")
-    print(f"   nibble data: {len(nibble_data)} bytes")
+    logger.info(
+        "Image processed: %dx%d, low=%d high=%d, nibble data: %d bytes",
+        width, height, low_percentile, high_percentile, len(nibble_data),
+    )
     return nibble_data, width, height, dithered

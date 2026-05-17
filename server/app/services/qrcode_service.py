@@ -1,5 +1,4 @@
 import json
-import logging
 from io import BytesIO
 from pathlib import Path
 
@@ -21,8 +20,6 @@ from thermal_printer.image_processor import gray_to_nibbles
 from server.app.schemas.print_settings import PrintSettings
 from server.app.schemas.preview import PreviewResponse
 from server.app.services.job_manager import JobManager, JobType
-
-logger = logging.getLogger(__name__)
 
 _QR_SETTINGS_PATH = Path(__file__).resolve().parent.parent / "configs" / "qrcode.json"
 

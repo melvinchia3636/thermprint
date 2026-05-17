@@ -6,7 +6,6 @@ creates a print job.  Also provides a standalone preview function used by the
 ``POST /api/qrcode/preview`` endpoint.
 """
 
-import logging
 from io import BytesIO
 
 import qrcode
@@ -25,8 +24,6 @@ from qrcode.image.styles.colormasks import SolidFillColorMask
 from thermal_printer.image_processor import gray_to_nibbles
 from server.app.schemas.preview import PreviewResponse
 from server.app.services.jobs.job_manager import JobManager, JobType
-
-logger = logging.getLogger(__name__)
 
 _QR_SETTINGS = {
     "width": 384,

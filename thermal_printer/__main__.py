@@ -6,10 +6,14 @@ Usage:
 
 import argparse
 import asyncio
+import logging
 
 from thermal_printer.image_processor import process_image
 from thermal_printer.simulator import simulate_print
 from thermal_printer.device import PrinterDevice
+
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+logger = logging.getLogger(__name__)
 
 
 async def main():
@@ -83,7 +87,7 @@ async def main():
     )
     args = parser.parse_args()
 
-    print(f"\U0001f4f7 processing: {args.image}")
+    logger.info("Processing: %s", args.image)
     nibble_data, width, height, dithered = process_image(
         args.image, args.width, args.contrast, args.gamma, args.rotate
     )

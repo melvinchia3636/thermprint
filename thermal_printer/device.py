@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from bleak import BleakScanner, BleakClient
 
@@ -13,6 +14,8 @@ from thermal_printer.protocol import (
     build_gray_scan_packet,
 )
 
+logger = logging.getLogger(__name__)
+
 
 class PrinterDevice:
     def __init__(self, name_filter):
@@ -22,23 +25,22 @@ class PrinterDevice:
         self.mtu_size = 23
 
     async def discover(self):
-        print("\U0001f50d scanning...")
+        logger.info("Scanning for BLE device: %s", self.name_filter)
         devices = await BleakScanner.discover()
         for d in devices:
             if d.name and self.name_filter in d.name:
                 self.address = d.address
-                print(f"\U0001f3af found: {d.name}")
+                logger.info("Found BLE device: %s", d.name)
                 return
-        print("\u274c device not found")
+        logger.warning("BLE device not found: %s", self.name_filter)
 
     async def connect(self):
         if not self.address:
             raise RuntimeError("No device address. Call discover() first.")
         self._client = BleakClient(self.address)
         await self._client.connect()
-        print("\U0001f9e0 connected")
+        logger.info("Connected to BLE device (MTU: %d)", self._client.mtu_size)
         self.mtu_size = self._client.mtu_size
-        print(f"\U0001f4e1 MTU: {self.mtu_size}")
 
     async def send(self, data):
         for i in range(0, len(data), self.mtu_size - 3):
@@ -68,8 +70,8 @@ class PrinterDevice:
             chunks.append(nibble_data[offset:end])
             offset = end
 
-        print(
-            f"\U0001f4e6 {len(chunks)} chunks (quality=0x{quality:02X} speed=0x{speed:02X})"
+        logger.info(
+            "Sending %d chunks (quality=0x%02X speed=0x%02X)", len(chunks), quality, speed
         )
 
         await self.send(set_quality(quality))
@@ -90,7 +92,9 @@ class PrinterDevice:
             await self.send(pkt)
             await self.send(feed_paper_speed(speed))
             await asyncio.sleep(chunk_delay)
-            print(f"  chunk {i + 1}/{len(chunks)} ({len(chunk)} \u2192 {len(pkt)} bytes)")
+            logger.debug(
+                "Chunk %d/%d (%d bytes)", i + 1, len(chunks), len(chunk)
+            )
 
         await asyncio.sleep(1.0)
         await self.send(feed_paper(feed))
@@ -98,7 +102,7 @@ class PrinterDevice:
         await self.send(get_dev_state())
         await asyncio.sleep(0.1)
 
-        print("\U0001f5a8\ufe0f DONE")
+        logger.info("Print job completed")
 
     async def close(self):
         if self._client:

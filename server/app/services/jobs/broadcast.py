@@ -6,9 +6,6 @@ Used by both :class:`JobManager` (job status updates) and :class:`PrinterManager
 """
 
 import asyncio
-import logging
-
-logger = logging.getLogger(__name__)
 
 
 class BroadcastService:

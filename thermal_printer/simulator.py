@@ -1,8 +1,11 @@
+import logging
 from io import BytesIO
 
 from PIL import Image
 
 from thermal_printer.protocol import GRAY_LEVELS
+
+logger = logging.getLogger(__name__)
 
 
 def simulate_print(dithered_pixels, width, height, output):
@@ -24,4 +27,4 @@ def simulate_print(dithered_pixels, width, height, output):
     if isinstance(output, BytesIO):
         output.seek(0)
     else:
-        print(f"\U0001f5bc\ufe0f preview saved: {output}")
+        logger.info("Preview saved: %s", output)

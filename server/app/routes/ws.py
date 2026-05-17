@@ -1,10 +1,6 @@
-import logging
-
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
 from server.app.bootstrap import get_job_manager_ws as get_job_manager
-
-logger = logging.getLogger(__name__)
 
 router = APIRouter()
 

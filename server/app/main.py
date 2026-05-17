@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from uvicorn.logging import ColourizedFormatter
 
 from server.app.bootstrap import Settings
 from server.app.services.printer.printer_service import PrinterManager
@@ -22,8 +23,12 @@ from server.app.routes.device import status as status_routes
 from server.app.routes import ws
 from server.app.routes import settings as settings_routes
 
-logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
-logger = logging.getLogger(__name__)
+_handler = logging.StreamHandler()
+_handler.setFormatter(
+    ColourizedFormatter("%(levelprefix)s %(message)s")
+)
+logging.basicConfig(level=logging.INFO, handlers=[_handler])
+logger = logging.getLogger("thermal_printer")
 
 
 @asynccontextmanager
