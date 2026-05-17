@@ -14,18 +14,12 @@ trap cleanup EXIT INT TERM
 
 echo "Starting backend..."
 cd "$SCRIPT_DIR/server"
-PYTHONPATH="$SCRIPT_DIR" uv run uvicorn server.app.main:app --reload --host 0.0.0.0 --port 8000 &
+PYTHONPATH="$SCRIPT_DIR" uv run uvicorn server.app.main:app --reload --host 0.0.0.0 --port 558 &
 BACKEND_PID=$!
 
 echo "Starting frontend..."
 cd "$SCRIPT_DIR/client"
-bun run dev --host &
+bun run dev --host --port 557 &
 FRONTEND_PID=$!
-
-echo ""
-echo "  Backend:  http://localhost:8000"
-echo "  Frontend: http://localhost:5173"
-echo "  API docs: http://localhost:8000/docs"
-echo ""
 
 wait
