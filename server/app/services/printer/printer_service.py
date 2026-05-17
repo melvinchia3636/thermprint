@@ -12,8 +12,8 @@ from enum import Enum
 
 from bleak.exc import BleakError
 
-from thermal_printer.device import PrinterDevice
-from thermal_printer.protocol import (
+from lib.thermal_printer.device import PrinterDevice
+from lib.thermal_printer.protocol import (
     set_quality,
     set_energy,
     set_print_mode_gray16,

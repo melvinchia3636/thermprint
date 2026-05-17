@@ -8,8 +8,8 @@ import tempfile
 
 from fastapi import UploadFile, HTTPException
 
-from thermal_printer.image_processor import process_image
-from thermal_printer.simulator import simulate_print
+from lib.thermal_printer.image_processor import process_image
+from lib.thermal_printer.simulator import simulate_print
 from server.app.schemas.print_settings import PrintSettings
 from server.app.services.jobs.job_manager import JobManager, JobType
 from io import BytesIO
