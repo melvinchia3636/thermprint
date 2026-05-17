@@ -209,6 +209,7 @@ class JobManager:
                         job_id, status=JobStatus.done, progress=None
                     )
                     logger.info("Job %s completed", job_id)
+                    await asyncio.sleep(10)
             except Exception as exc:
                 job.status = JobStatus.failed
                 job.error = str(exc)
