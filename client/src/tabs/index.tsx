@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Icon } from "@iconify/react";
 import ImageTab from "./ImageTab";
 import QRCodeTab from "./QRCodeTab";
+import CalendarTab from "./CalendarTab";
 
 const TABS: {
   id: string;
@@ -20,6 +21,12 @@ const TABS: {
     label: "QR Code",
     icon: "tabler:qrcode",
     component: <QRCodeTab />,
+  },
+  {
+    id: "calendar",
+    label: "Calendar",
+    icon: "tabler:calendar",
+    component: <CalendarTab />,
   },
 ];
 

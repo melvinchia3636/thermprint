@@ -82,3 +82,33 @@ export function useQRPreview() {
     },
   });
 }
+
+export function usePrintCalendar() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ year, month }: { year: number; month: number }) => {
+      const fd = new FormData();
+      fd.append("year", String(year));
+      fd.append("month", String(month));
+      return request<PrintResponse>("/calendar", { method: "POST", body: fd });
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["jobs"] });
+      toast.success("Calendar added to print queue");
+    },
+    onError: (err) => {
+      toast.error(err instanceof Error ? err.message : "Failed to print calendar");
+    },
+  });
+}
+
+export function useCalendarPreview() {
+  return useMutation({
+    mutationFn: ({ year, month }: { year: number; month: number }) => {
+      const fd = new FormData();
+      fd.append("year", String(year));
+      fd.append("month", String(month));
+      return request<PreviewResponse>("/calendar/preview", { method: "POST", body: fd });
+    },
+  });
+}

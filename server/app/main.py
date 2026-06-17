@@ -17,6 +17,7 @@ from server.app.error_handlers import validation_exception_handler
 from server.app.routes.printer import print as print_routes
 from server.app.routes.printer import preview as preview_routes
 from server.app.routes.printer import qrcode as qrcode_routes
+from server.app.routes.printer import calendar as calendar_routes
 from server.app.routes.jobs import jobs as jobs_routes
 from server.app.routes.device import device as device_routes
 from server.app.routes.device import status as status_routes
@@ -77,5 +78,6 @@ app.include_router(status_routes.router)
 app.include_router(ws.router)
 app.include_router(settings_routes.router)
 app.include_router(qrcode_routes.router)
+app.include_router(calendar_routes.router)
 
 app.add_exception_handler(RequestValidationError, validation_exception_handler)

@@ -13,7 +13,7 @@ export interface PrintSettings {
 
 export type JobStatus = "queued" | "connecting" | "printing" | "done" | "failed" | "cancelled";
 
-export type JobType = "image" | "qr_code";
+export type JobType = "image" | "qr_code" | "calendar";
 
 export interface JobStatusResponse {
   job_id: string;

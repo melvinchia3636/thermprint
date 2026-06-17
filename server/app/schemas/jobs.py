@@ -16,6 +16,7 @@ class JobStatus(str, Enum):
 class JobType(str, Enum):
     image = "image"
     qr_code = "qr_code"
+    calendar = "calendar"
 
 
 class PrintResponse(BaseModel):

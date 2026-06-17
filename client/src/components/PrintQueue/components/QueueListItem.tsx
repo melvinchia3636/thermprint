@@ -27,8 +27,10 @@ export default function QueueListItem({
     icon: "tabler:question-mark",
   };
 
-  const typeIcon = job.type === "qr_code" ? "tabler:qrcode" : "tabler:photo";
-  const typeLabel = job.type === "qr_code" ? "QR Code" : "Image";
+  const typeIcon =
+    job.type === "qr_code" ? "tabler:qrcode" : job.type === "calendar" ? "tabler:calendar" : "tabler:photo";
+  const typeLabel =
+    job.type === "qr_code" ? "QR Code" : job.type === "calendar" ? "Calendar" : "Image";
 
   const progress = chunkProgress(job.progress);
 
