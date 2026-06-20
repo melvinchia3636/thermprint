@@ -41,6 +41,9 @@ async def lifespan(app: FastAPI):
     device_store.load()
     db = DatabaseService()
     await db.start()
+    count = await db.fail_incomplete_jobs("Server restarted")
+    if count:
+        logger.info("Marked %d in-flight job(s) as failed (server restarted)", count)
     printer = PrinterManager()
     job_mgr = JobManager(printer, db)
     app.state.settings = settings

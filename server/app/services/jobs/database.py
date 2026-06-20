@@ -164,6 +164,16 @@ class DatabaseService:
         await self._conn.commit()
         return cursor.rowcount > 0
 
+    async def fail_incomplete_jobs(self, reason: str) -> int:
+        """Mark all non-terminal jobs as failed and return the count affected."""
+        terminal = (JobStatus.done.value, JobStatus.failed.value, JobStatus.cancelled.value)
+        cursor = await self._conn.execute(
+            "UPDATE jobs SET status = ?, error = ? WHERE status NOT IN (?, ?, ?)",
+            (JobStatus.failed.value, reason, *terminal),
+        )
+        await self._conn.commit()
+        return cursor.rowcount
+
 
 def blob_to_data_url(blob: bytes | None) -> str | None:
     if not blob:
