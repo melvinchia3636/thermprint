@@ -12,3 +12,5 @@ class PrintSettings(BaseModel):
     chunk_rows: int = Field(default=10, ge=1, le=100, description="Rows per data chunk")
     chunk_delay: float = Field(default=0.2, ge=0.0, le=10.0, description="Delay in seconds between chunks")
     feed: int = Field(default=200, ge=0, le=5000, description="Paper feed pixels after print")
+    split_cols: int = Field(default=1, ge=1, le=10, description="Number of horizontal splits (columns)")
+    split_rows: int = Field(default=1, ge=1, le=10, description="Number of vertical splits (rows)")

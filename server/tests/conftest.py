@@ -21,6 +21,8 @@ from server.app.routes.printer import preview, print as print_route, qrcode, cal
 from server.app.routes.jobs import jobs as jobs_route
 from server.app.routes.device import device as device_route, status as status_route
 from server.app.routes import settings as settings_route, ws
+from server.app.error_handlers import validation_exception_handler
+from fastapi.exceptions import RequestValidationError
 
 
 def _make_test_image(size=(100, 80)) -> bytes:
@@ -111,6 +113,7 @@ async def app(settings_file, device_file):
     app.include_router(status_route.router)
     app.include_router(settings_route.router)
     app.include_router(ws.router)
+    app.add_exception_handler(RequestValidationError, validation_exception_handler)
     yield app
     await job_mgr.stop()
     await db.stop()

@@ -14,6 +14,8 @@ def parse_print_settings(
     chunk_rows: int = Form(10),
     chunk_delay: float = Form(0.2),
     feed: int = Form(200),
+    split_cols: int = Form(1, ge=1, le=10),
+    split_rows: int = Form(1, ge=1, le=10),
 ) -> PrintSettings:
     return PrintSettings(
         width=width,
@@ -26,4 +28,6 @@ def parse_print_settings(
         chunk_rows=chunk_rows,
         chunk_delay=chunk_delay,
         feed=feed,
+        split_cols=split_cols,
+        split_rows=split_rows,
     )

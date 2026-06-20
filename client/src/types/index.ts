@@ -9,6 +9,8 @@ export interface PrintSettings {
   chunk_rows: number;
   chunk_delay: number;
   feed: number;
+  split_cols: number;
+  split_rows: number;
 }
 
 export type JobStatus = "queued" | "connecting" | "printing" | "done" | "failed" | "cancelled";

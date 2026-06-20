@@ -51,6 +51,22 @@ export const IMAGE_FIELDS: FieldDef[] = [
       { value: 270, label: "270\u00b0" },
     ],
   },
+  {
+    key: "split_cols",
+    label: "Split Columns",
+    description:
+      "Number of horizontal splits. The image is processed at width × columns, then cut into columns-wide strips printed sequentially. Use for large / wide images that exceed the printer width.",
+    min: 1,
+    max: 10,
+  },
+  {
+    key: "split_rows",
+    label: "Split Rows",
+    description:
+      "Number of vertical splits. Combined with columns, divides the image into a grid of pieces printed as a continuous strip with dashed cut lines.",
+    min: 1,
+    max: 10,
+  },
 ];
 
 export const PRINTER_FIELDS: FieldDef[] = [

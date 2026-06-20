@@ -14,6 +14,8 @@ FIELD_LABELS = {
     "chunk_rows": "Chunk rows",
     "chunk_delay": "Chunk delay",
     "feed": "Paper feed",
+    "split_cols": "Split columns",
+    "split_rows": "Split rows",
 }
 
 RULE_MESSAGES = {
