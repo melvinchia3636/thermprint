@@ -3,7 +3,8 @@ import { useJobContext } from "../../../context/JobContext";
 import QueueListItem from "./QueueListItem";
 
 export default function QueueList() {
-  const { jobsData, cancelJob, deleteJob, hasMore, loadMore } = useJobContext();
+  const { jobsData, cancelJob, deleteJob, hasMore, isLoadingMore, loadMore } =
+    useJobContext();
 
   return (
     <>
@@ -35,8 +36,13 @@ export default function QueueList() {
             />
           ))}
           {hasMore && (
-            <button onClick={loadMore} className="btn btn-ghost btn-sm w-full mt-2">
-              Load more
+            <button
+              onClick={loadMore}
+              disabled={isLoadingMore}
+              className="btn btn-ghost btn-sm w-full mt-2"
+            >
+              {isLoadingMore && <Icon icon="svg-spinners:ring-resize" />}
+              {isLoadingMore ? "Loading..." : "Load more"}
             </button>
           )}
         </div>

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import type { JobStatusResponse, JobStatus, JobType } from "../types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { request } from "./client";
 import { useWebSocket } from "./websocket";
@@ -12,6 +12,7 @@ export function useJobs(offset = 0, limit = 10) {
     queryKey: ["jobs", { offset, limit }],
     queryFn: () => request(`/jobs?offset=${offset}&limit=${limit}`),
     staleTime: Infinity,
+    placeholderData: keepPreviousData,
   });
 
   const wsRef = useRef<WebSocket | null>(null);

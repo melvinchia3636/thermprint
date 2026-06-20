@@ -8,6 +8,7 @@ interface JobContextValue {
   jobsData: JobStatusResponse[] | undefined;
   total: number;
   hasMore: boolean;
+  isLoadingMore: boolean;
   loadMore: () => void;
   cancelJob: ReturnType<typeof useCancelJob>;
   deleteJob: ReturnType<typeof useDeleteJob>;
@@ -23,7 +24,7 @@ export function useJobContext() {
 
 export function JobProvider({ children }: { children: ReactNode }) {
   const [limit, setLimit] = useState(PAGE_SIZE);
-  const { data } = useJobs(0, limit);
+  const { data, isFetching } = useJobs(0, limit);
   const cancelJob = useCancelJob();
   const deleteJob = useDeleteJob();
 
@@ -40,6 +41,7 @@ export function JobProvider({ children }: { children: ReactNode }) {
         jobsData: data?.jobs,
         total,
         hasMore,
+        isLoadingMore: isFetching,
         loadMore,
         cancelJob,
         deleteJob,

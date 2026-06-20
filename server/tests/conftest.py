@@ -17,7 +17,7 @@ from server.app.services.jobs.database import DatabaseService
 from server.app.services.jobs.job_manager import JobManager
 from server.app.services.stores.device_store import DeviceStore
 from server.app.services.stores.settings_store import SettingsStore
-from server.app.routes.printer import preview, print as print_route, qrcode
+from server.app.routes.printer import preview, print as print_route, qrcode, calendar as calendar_route
 from server.app.routes.jobs import jobs as jobs_route
 from server.app.routes.device import device as device_route, status as status_route
 from server.app.routes import settings as settings_route, ws
@@ -106,6 +106,7 @@ async def app(settings_file, device_file):
     app.include_router(print_route.router)
     app.include_router(jobs_route.router)
     app.include_router(qrcode.router)
+    app.include_router(calendar_route.router)
     app.include_router(device_route.router)
     app.include_router(status_route.router)
     app.include_router(settings_route.router)
