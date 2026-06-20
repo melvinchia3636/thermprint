@@ -3,7 +3,7 @@ import { useJobContext } from "../../../context/JobContext";
 import QueueListItem from "./QueueListItem";
 
 export default function QueueList() {
-  const { jobsData, cancelJob, deleteJob, hasMore, isLoadingMore, loadMore } =
+  const { jobsData, isLoading, cancelJob, deleteJob, hasMore, isLoadingMore, loadMore } =
     useJobContext();
 
   return (
@@ -20,7 +20,11 @@ export default function QueueList() {
           <Icon icon="tabler:x" className="size-5" />
         </label>
       </header>
-      {!jobsData || jobsData.length === 0 ? (
+      {isLoading ? (
+        <div className="flex items-center justify-center flex-1">
+          <span className="loading loading-spinner loading-lg" />
+        </div>
+      ) : !jobsData || jobsData.length === 0 ? (
         <p className="text-base-content/30 flex text-lg flex-col flex-1 justify-center items-center gap-2">
           <Icon icon="tabler:file-off" className="size-8" />
           No print jobs yet.
