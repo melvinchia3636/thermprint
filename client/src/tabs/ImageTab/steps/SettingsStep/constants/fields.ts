@@ -93,6 +93,7 @@ export const PRINTER_FIELDS: FieldDef[] = [
       "Thermal energy applied to the print head (0x0000–0xFFFF). Higher values produce darker prints. 0 = auto, letting the printer decide the optimal energy level.",
     min: 0,
     max: 65535,
+    step: 1000,
   },
   {
     key: "chunk_rows",
