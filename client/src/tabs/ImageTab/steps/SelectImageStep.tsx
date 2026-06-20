@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { Icon } from "@iconify/react";
 import { useImagePrinting } from "../contexts/ImagePrintingContext";
 import StepCard from "../../../components/ui/StepCard";
@@ -8,11 +8,36 @@ export default function SelectImageStep() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
-  const handle = (file: File | undefined) => {
-    if (!file) return;
-    setPreview(URL.createObjectURL(file));
-    setImage(file);
-  };
+  const handle = useCallback(
+    (file: File | undefined) => {
+      if (!file) return;
+      setPreview(URL.createObjectURL(file));
+      setImage(file);
+    },
+    [setImage],
+  );
+
+  const handlePaste = useCallback(async () => {
+    try {
+      const items = await navigator.clipboard.read();
+      for (const item of items) {
+        for (const type of item.types) {
+          if (type.startsWith("image/")) {
+            const blob = await item.getType(type);
+            const file = new File(
+              [blob],
+              `clipboard.${type.split("/")[1] || "png"}`,
+              { type },
+            );
+            handle(file);
+            return;
+          }
+        }
+      }
+    } catch {
+      // clipboard empty or permission denied — silently ignore
+    }
+  }, [handle]);
 
   return (
     <StepCard
@@ -46,6 +71,10 @@ export default function SelectImageStep() {
           </span>
         )}
       </figure>
+      <button className="btn btn-outline w-full mt-4" onClick={handlePaste}>
+        <Icon icon="tabler:clipboard" className="size-5" />
+        Paste from clipboard
+      </button>
     </StepCard>
   );
 }
