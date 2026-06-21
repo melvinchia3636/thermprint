@@ -88,11 +88,14 @@ export default function QueueListItem({
           />
           <span className="text-xs text-base-content/50">{job.progress}</span>
         </div>
+      ) : job.error ? (
+        <div className="flex items-start gap-2 mt-1 p-2 rounded-box bg-error/10 border border-error/20">
+          <Icon icon="tabler:alert-circle" className="size-4 text-error shrink-0 mt-0.5" />
+          <span className="text-sm text-error break-all">{job.error}</span>
+        </div>
       ) : (
-        (job.progress || job.error) && (
-          <span className="text-sm min-w-0 truncate">
-            {job.progress || job.error}
-          </span>
+        job.progress && (
+          <span className="text-sm min-w-0 truncate">{job.progress}</span>
         )
       )}
       {!["done", "cancelled", "failed"].includes(job.status) && (
